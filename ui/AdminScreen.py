@@ -1,3 +1,10 @@
+from tkinter import Label, Frame
+
+from resources.Variables import Variables as v
+from tools.ClearContent import clear_content
+from tools.Configure import *
+
+
 
 def __saveAdmin(compName: str, bizType: str, pwd: str, comPwd: str, notifyTop: Label, notify: Label):
     if compName == "" or bizType == "" or pwd == "" or comPwd == "":
@@ -7,6 +14,7 @@ def __saveAdmin(compName: str, bizType: str, pwd: str, comPwd: str, notifyTop: L
         notify.config(text="Password does not match!", fg="red")
         return
     else:
+        from ui.LoginScreen import loginPage
         saveNewAdmin(compName, bizType, pwd)
         loginPage()
         # else will contain dialog for password does not match
@@ -20,14 +28,13 @@ def saveNewAdmin(name: str, biz: str, pwd: str):
 # 004
 def registerAdmin():
     clear_content()
-    frame = Frame(app)
+    frame = Frame(v.app)
     frame.columnconfigure(0, weight=0)
     frame.columnconfigure(1, weight=3)
     configFrame(frame)
 
-    global isOpened
-    isOpened = frame
-    backList.append("004")
+    v.holdFrameReference = frame
+    #backList.append("004")
 
     notifyTop = Label(frame, text="")
     Label(frame, text="Company Name: ").grid(row=1, column=0, sticky="w")
@@ -55,9 +62,9 @@ def registerAdmin():
     # btn1.grid(row=2, column=0)
     btn2.grid(row=6, column=1)
 
-    app.update_idletasks()
-    cenX = (app.winfo_width() - frame.winfo_reqwidth()) // 2
-    cenY = ((app.winfo_height() - frame.winfo_reqheight()) // 2)
+    v.app.update_idletasks()
+    cenX = (v.app.winfo_width() - frame.winfo_reqwidth()) // 2
+    cenY = ((v.app.winfo_height() - frame.winfo_reqheight()) // 2)
 
     frame.place(x=cenX, y=cenY)
 
@@ -65,19 +72,18 @@ def registerAdmin():
 # 005
 def adminPage1():
     clear_content()
-    frame = Frame(app)
+    frame = Frame(v.app)
     configFrame(frame)
 
-    global isOpened
-    isOpened = frame
-    backList.append("005")
+    v.holdFrameReference = frame
+    #backList.append("005")
 
     Label(frame, text="Company Name").grid(row=0, column=0)
     Label(frame, text="Business Type").grid(row=0, column=1)
 
-    app.update_idletasks()
-    cenX = (app.winfo_width() - frame.winfo_reqwidth()) // 2
-    cenY = ((app.winfo_height() - frame.winfo_reqheight()) // 2)
+    v.app.update_idletasks()
+    cenX = (v.app.winfo_width() - frame.winfo_reqwidth()) // 2
+    cenY = ((v.app.winfo_height() - frame.winfo_reqheight()) // 2)
 
     frame.place(x=cenX, y=cenY)
     pass

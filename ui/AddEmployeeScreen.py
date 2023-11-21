@@ -1,4 +1,9 @@
+from resources.Images import Images
 from resources.Variables import Variables as v
+from tools.ClearContent import clear_content
+from tools.Configure import *
+
+
 
 def __saveEmployee():
     pass
@@ -7,12 +12,11 @@ def __saveEmployee():
 # 007
 def addEmployeePage():
     clear_content()
-    frame = Frame(app)
+    frame = Frame(v.app)
     configFrame(frame)
 
-    global isOpened
-    isOpened = frame
-    backList.append("007")
+    v.holdFrameReference = frame
+    #backList.append("007")
 
     Label(frame, text="First Name: ").grid(row=0, column=0, sticky="w")
     Label(frame, text="Middle Name: ").grid(row=1, column=0, sticky="w")
@@ -40,9 +44,9 @@ def addEmployeePage():
     # btn1.pack()
     btn2.grid(row=6, column=2)
 
-    app.update_idletasks()
-    cenX = (app.winfo_width() - frame.winfo_reqwidth()) // 2
-    cenY = ((app.winfo_height() - frame.winfo_reqheight()) // 2)
+    v.app.update_idletasks()
+    cenX = (v.app.winfo_width() - frame.winfo_reqwidth()) // 2
+    cenY = ((v.app.winfo_height() - frame.winfo_reqheight()) // 2)
 
     frame.place(x=cenX, y=cenY)
     pass
@@ -51,16 +55,15 @@ def addEmployeePage():
 # 008
 def addEmployeeNextPage():
     clear_content()
-    frame = Frame(app)
+    frame = Frame(v.app)
     configFrame(frame)
 
-    global isOpened
-    isOpened = frame
-    backList.append("008")
+    v.holdFrameReference = frame
+    #backList.append("008")
 
     text = Label(frame, text="Put Right index Finger on the sensor", fg="red")
-    left = Label(frame, image=imageLeftHand)
-    right = Label(frame, image=imageRightHand)
+    left = Label(frame, image=Images.imageLeftHand)
+    right = Label(frame, image=Images.imageRightHand)
 
     # frame.config(image=image1)
 
@@ -68,9 +71,9 @@ def addEmployeeNextPage():
     left.grid(row=1, column=0)
     right.grid(row=1, column=2)
 
-    app.update_idletasks()
-    cenX = (app.winfo_width() - frame.winfo_reqwidth()) // 2
-    cenY = ((app.winfo_height() - frame.winfo_reqheight()) // 2)
+    v.app.update_idletasks()
+    cenX = (v.app.winfo_width() - frame.winfo_reqwidth()) // 2
+    cenY = ((v.app.winfo_height() - frame.winfo_reqheight()) // 2)
 
     frame.place(x=cenX, y=cenY)
     pass
