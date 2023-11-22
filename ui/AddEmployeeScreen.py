@@ -4,7 +4,6 @@ from tools.ClearContent import clear_content
 from tools.Configure import *
 
 
-
 def __saveEmployee():
     pass
 

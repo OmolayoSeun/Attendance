@@ -3,6 +3,7 @@ from tkinter import Label, Frame
 from resources.Variables import Variables as v
 from tools.ClearContent import clear_content
 from tools.Configure import *
+from database.DB import DB
 
 
 
@@ -15,8 +16,11 @@ def __saveAdmin(compName: str, bizType: str, pwd: str, comPwd: str, notifyTop: L
         return
     else:
         from ui.LoginScreen import loginPage
-        saveNewAdmin(compName, bizType, pwd)
-        loginPage()
+        result = DB.saveAdminInfo(compName, bizType, pwd)
+        if result:
+            loginPage()
+        else:
+            notify.config(text="Can't create admin!", fg="red")
         # else will contain dialog for password does not match
     pass
 
