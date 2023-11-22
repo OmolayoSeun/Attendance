@@ -4,16 +4,20 @@ from resources.Variables import Variables as v
 from tools.ClearContent import clear_content
 from tools.Configure import *
 from ui.AdminScreen import adminPage1, registerAdmin
+from database.DB import DB
 
 
 def __nextLogin(e1: Entry, e2: Entry, frame):
     username = e1.get()
     password = e2.get()
+
+    adminInfo = DB.getAdminInfo()
+
     # ssid = None
     print(username)
-    if username == v.ssid and password == v.pw:
+    if username == adminInfo[1] and password == adminInfo[-1]:
         adminPage1()
-    elif v.ssid is None:
+    elif adminInfo[1] is None:
         txt = Label(frame, text="User does not exit")
         txt.config(fg="red")
         txt.grid(row=3, column=1)
@@ -42,6 +46,7 @@ def loginPage():
     configFrame(frame)
 
     v.holdFrameReference = frame
+    # TODO Back list for going back
     #backList.append("002")
 
     Label(frame, text="Company Name: ").grid(row=0, column=0, sticky="w")

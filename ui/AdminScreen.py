@@ -1,4 +1,4 @@
-from tkinter import Label, Frame
+from tkinter import Label, Frame, ttk
 
 from resources.Variables import Variables as v
 from tools.ClearContent import clear_content
@@ -85,6 +85,25 @@ def adminPage1():
     Label(frame, text="Company Name").grid(row=0, column=0)
     Label(frame, text="Business Type").grid(row=0, column=1)
 
+    # Create the treeview widget
+    treeview = ttk.Treeview(frame, columns=("First Name", "Middle Name", "Last Name", "Phone No.", "Email", "Position"), show="headings")
+
+    # Define the column headings
+    treeview.heading("First Name", text="First Name")
+    treeview.heading("Middle Name", text="Middle Name")
+    treeview.heading("Last Name", text="Last Name")
+    treeview.heading("Phone No", text="Phone No")
+    treeview.heading("Email", text="Email")
+    treeview.heading("Position", text="Position")
+
+    # Add items to the treeview
+    result = DB.getEmpList()
+    for r in result:
+        treeview.insert("", 'end', '1', values=(r[1], r[2], r[3], r[4], r[5], r[6]))
+
+    # Pack the treeview widget into the main window
+    treeview.pack(fill='both', expand=True)
+
     v.app.update_idletasks()
     cenX = (v.app.winfo_width() - frame.winfo_reqwidth()) // 2
     cenY = ((v.app.winfo_height() - frame.winfo_reqheight()) // 2)
@@ -96,3 +115,8 @@ def adminPage1():
 # 006
 def adminPage2():
     pass
+
+
+
+
+

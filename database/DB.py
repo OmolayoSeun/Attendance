@@ -80,7 +80,7 @@ class DB:
         DB.openDB()
         cursor = DB.conn.cursor()
         try:
-            rows = cursor.execute("SELECT * FROM Employee").fetchall()
+            rows = cursor.execute("SELECT * FROM Employee WHERE id = ?", (Eid,)).fetchone()
             print(rows)
         except Error as e:
             rows = [[]]
@@ -88,10 +88,22 @@ class DB:
 
         cursor.close()
         DB.closeDB()
-        return rows[0]
+        return rows
 
     @staticmethod
     def getEmpList():
+        DB.openDB()
+        cursor = DB.conn.cursor()
+        try:
+            rows = cursor.execute("SELECT * FROM Employee").fetchone()
+            print(rows)
+        except Error as e:
+            rows = [[]]
+            print(e)
+
+        cursor.close()
+        DB.closeDB()
+        return rows
         pass
 
     @staticmethod
@@ -110,5 +122,6 @@ class DB:
 #a = DB.saveEmpInfo( "deal", "asa", "aa", "whseed", "gdg", "hhd", "sited")
 #print(a)
 #
-print(DB.getEmpInfo("deal"))
+#print(DB.getEmpInfo("deal"))
 # DB.getAdminInfo()
+#DB.getEmpList()
