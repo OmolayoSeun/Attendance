@@ -6,6 +6,7 @@ from  resources.Images import Image
 from PIL import ImageTk, Image
 from resources.Colors import Color as color
 from resources.Images import *
+from ui.AddEmployeeScreen import addEmployeePage
 from ui.AdminScreen import adminPage1
 from ui.FirstScreen import firstPage
 
@@ -81,5 +82,6 @@ isOpened = Frame
 # firstPage()
 #backBtn.config(command=switch)
 #firstPage()
-adminPage1()
+#adminPage1()
+addEmployeePage()
 v.app.mainloop()

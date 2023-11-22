@@ -17,7 +17,7 @@ def configLabel(item: Label):
 
 
 def configEntry(item: Entry):
-    item.config(border=0, background=color.white)
+    item.config(border=1, background=color.white)
     pass
 
 
