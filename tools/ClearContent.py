@@ -6,5 +6,9 @@ def clear_content():
     # for widget in v.app.winfo_children():
     #     if widget == isOpened:
     #         widget.destroy()
-    v.holdFrameReference.destroy()
+    try:
+        v.holdFrameReference.destroy()
+    except:
+        print("Null View error")
+
     pass

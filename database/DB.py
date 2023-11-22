@@ -95,7 +95,7 @@ class DB:
         DB.openDB()
         cursor = DB.conn.cursor()
         try:
-            rows = cursor.execute("SELECT * FROM Employee").fetchone()
+            rows = cursor.execute("SELECT * FROM Employee").fetchall()
             print(rows)
         except Error as e:
             rows = [[]]

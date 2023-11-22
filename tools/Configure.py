@@ -21,7 +21,6 @@ def configEntry(item: Entry):
     pass
 
 
-
 def configButton(item: Button):
     item.config(
         background=color.skyBlue, foreground=color.white,
@@ -29,3 +28,12 @@ def configButton(item: Button):
         highlightthickness=2, highlightbackground=color.green, highlightcolor=color.skyBlue,
     )
     pass
+
+
+def configDefBtn(item: Button):
+    item.config(
+        background=color.skyBlue, foreground=color.white,
+        activebackground=color.green, activeforeground=color.white,
+        highlightthickness=2, highlightbackground=color.green, highlightcolor=color.skyBlue,
+    )
+    return item

@@ -4,8 +4,18 @@ from resources.Variables import Variables as v
 from tools.ClearContent import clear_content
 from tools.Configure import *
 from database.DB import DB
+from ui.AddEmployeeScreen import addEmployeePage
 
 
+adminInfo = []
+empInfo = []
+
+
+def __getInfoFromDB():
+    global adminInfo
+    global empInfo
+    adminInfo = DB.getAdminInfo()
+    empInfo = DB.getEmpList()
 
 def __saveAdmin(compName: str, bizType: str, pwd: str, comPwd: str, notifyTop: Label, notify: Label):
     if compName == "" or bizType == "" or pwd == "" or comPwd == "":
@@ -25,10 +35,6 @@ def __saveAdmin(compName: str, bizType: str, pwd: str, comPwd: str, notifyTop: L
     pass
 
 
-def saveNewAdmin(name: str, biz: str, pwd: str):
-    pass
-
-
 # 004
 def registerAdmin():
     clear_content()
@@ -38,7 +44,7 @@ def registerAdmin():
     configFrame(frame)
 
     v.holdFrameReference = frame
-    #backList.append("004")
+    # backList.append("004")
 
     notifyTop = Label(frame, text="")
     Label(frame, text="Company Name: ").grid(row=1, column=0, sticky="w")
@@ -80,29 +86,42 @@ def adminPage1():
     configFrame(frame)
 
     v.holdFrameReference = frame
-    #backList.append("005")
-
-    Label(frame, text="Company Name").grid(row=0, column=0)
-    Label(frame, text="Business Type").grid(row=0, column=1)
+    # backList.append("005")
+    __getInfoFromDB()
+    configLabel(Label(frame, text=f"Company Name: {adminInfo[1]}")).grid(row=0, column=0, pady=10)
+    configLabel(Label(frame, text=f"Business Type: {adminInfo[2]}")).grid(row=0, column=1)
 
     # Create the treeview widget
-    treeview = ttk.Treeview(frame, columns=("First Name", "Middle Name", "Last Name", "Phone No.", "Email", "Position"), show="headings")
+    treeview = ttk.Treeview(frame, columns=("First Name", "Middle Name", "Last Name", "Phone No.", "Email", "Position"),
+                            show="headings")
+
+    treeview.column("#1", width=150)
+    treeview.column("#2", width=150)
+    treeview.column("#3", width=150)
+    treeview.column("#4", width=150)
+    treeview.column("#5", width=150)
+    treeview.column("#6", width=150)
 
     # Define the column headings
-    treeview.heading("First Name", text="First Name")
-    treeview.heading("Middle Name", text="Middle Name")
-    treeview.heading("Last Name", text="Last Name")
-    treeview.heading("Phone No", text="Phone No")
-    treeview.heading("Email", text="Email")
-    treeview.heading("Position", text="Position")
+    treeview.heading("#1", text="First Name")
+    treeview.heading("#2", text="Middle Name")
+    treeview.heading("#3", text="Last Name")
+    treeview.heading("#4", text="Phone No")
+    treeview.heading("#5", text="Email")
+    treeview.heading("#6", text="Position")
 
     # Add items to the treeview
     result = DB.getEmpList()
-    for r in result:
-        treeview.insert("", 'end', '1', values=(r[1], r[2], r[3], r[4], r[5], r[6]))
+
+    if empInfo is not None:
+        print(empInfo)
+        for r in empInfo:
+            treeview.insert("", 'end', values=(r[1], r[2], r[3], r[4], r[5], r[6]))
 
     # Pack the treeview widget into the main window
-    treeview.pack(fill='both', expand=True)
+    treeview.grid(row=1, column=0, columnspan=7)
+
+    configDefBtn(Button(frame, text="Add Employee", padx=10, command=lambda: addEmployeePage())).grid(row=2, column=6, pady=5)
 
     v.app.update_idletasks()
     cenX = (v.app.winfo_width() - frame.winfo_reqwidth()) // 2
@@ -115,8 +134,3 @@ def adminPage1():
 # 006
 def adminPage2():
     pass
-
-
-
-
-

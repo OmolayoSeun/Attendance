@@ -2,9 +2,24 @@ from resources.Images import Images
 from resources.Variables import Variables as v
 from tools.ClearContent import clear_content
 from tools.Configure import *
+from database.DB import DB
 
 
-def __saveEmployee():
+empDetails = []
+
+def save():
+    DB.saveEmpInfo(empDetails[0], empDetails[0], empDetails[1], empDetails[2], empDetails[3], empDetails[4], empDetails[5])
+    pass
+
+def __keepEmpDetails(fName: str, mName: str, lName:str, phone: str, email: str, position: str):
+    empDetails.append(fName)
+    empDetails.append(mName)
+    empDetails.append(lName)
+    empDetails.append(phone)
+    empDetails.append(email)
+    empDetails.append(position)
+
+    addEmployeeNextPage()
     pass
 
 
@@ -32,7 +47,8 @@ def addEmployeePage():
     position = Entry(frame, width=35, borderwidth=5)
 
     # btn1 = Button(app, text="Back", padx=40, pady=20, command=firstPage)
-    btn2 = Button(frame, text="Next", padx=10, command=lambda: __saveEmployee())
+    btn2 = Button(frame, text="Next", padx=10, command=lambda: __keepEmpDetails(firstName.get(), middleName.get(), lastName.get(),
+                                                                                phone.get(), email.get(), position.get()))
 
     firstName.grid(row=0, column=1, columnspan=3)
     middleName.grid(row=1, column=1, columnspan=3)
@@ -60,15 +76,17 @@ def addEmployeeNextPage():
     v.holdFrameReference = frame
     #backList.append("008")
 
-    text = Label(frame, text="Put Right index Finger on the sensor", fg="red")
-    left = Label(frame, image=Images.imageLeftHand)
-    right = Label(frame, image=Images.imageRightHand)
-
+    text = configLabel(Label(frame, text="Put Right index Finger on the sensor", fg="red"))
+    left = configLabel(Label(frame, image=Images.imageLeftHand))
+    right = configLabel(Label(frame, image=Images.imageRightHand))
+    btn1 = Button(frame, text="Save", padx=10, command=save)
+    configButton(btn1)
     # frame.config(image=image1)
 
     text.grid(row=0, column=0, columnspan=3)
     left.grid(row=1, column=0)
     right.grid(row=1, column=2)
+    btn1.grid(row=2, column=1)
 
     v.app.update_idletasks()
     cenX = (v.app.winfo_width() - frame.winfo_reqwidth()) // 2
