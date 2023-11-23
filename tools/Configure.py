@@ -54,3 +54,4 @@ def add_hint(entry, hint_text):
     entry.configure(foreground='grey')  # Set default text color to grey
     entry.bind('<FocusIn>', on_entry_click)
     entry.bind('<FocusOut>', on_focusout)
+

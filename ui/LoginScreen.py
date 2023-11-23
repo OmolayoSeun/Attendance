@@ -7,6 +7,15 @@ from ui.AdminScreen import adminPage1, registerAdmin
 from database.DB import DB
 
 
+# def style(tkinterObj: ttk.Style()):
+#     style = tkinterObj
+#     # Configure the style for the Entry widget
+#     style.configure('Custom.TEntry', foreground='blue', font=('Arial', 12))
+#     style.map('Custom.TEntry',
+#               fieldbackground=[('focus', 'yellow'), ('!focus', 'white')],
+#               foreground=[('disabled', 'grey')])
+
+
 def __nextLogin(e1: Entry, e2: Entry, frame):
     username = e1.get()
     password = e2.get()
@@ -42,19 +51,27 @@ def loginPage():
     frame.columnconfigure(1, weight=0)
     configFrame(frame)
 
+    style = ttk.Style()
+    # Configure the style for the Entry widget
+    style.configure('Custom.TEntry', foreground='blue', font=('Arial', 12))
+    style.map('Custom.TEntry',
+              fieldbackground=[('focus', 'yellow'), ('!focus', 'white')],
+              foreground=[('disabled', 'grey')])
+
     v.holdFrameReference = frame
     v.currentView = v.viewLogin
 
     configLabel(Label(frame, text="Company Name: ")).grid(row=0, column=0, sticky="w")
     configLabel(Label(frame, text="Company password: ")).grid(row=2, column=0, sticky="w")
-    compName = ttk.Entry(frame, font=('ariel', '20', 'normal'))
+    compName = ttk.Entry(frame, style='Custom.TEntry')
     compPassword = ttk.Entry(frame, font=('ariel', '20', 'normal'))
 
     add_hint(compName, "Enter Company Name")
     add_hint(compPassword, "Enter Company Password")
 
     btn1 = configDefBtn(Button(frame, text="Register", padx=10, command=registerAdmin))
-    btn2 = configDefBtn(Button(frame, text="Login", padx=10, command=lambda: __nextLogin(compName, compPassword, frame)))
+    btn2 = configDefBtn(
+        Button(frame, text="Login", padx=10, command=lambda: __nextLogin(compName, compPassword, frame)))
 
     btn1.grid(row=4, column=0)
     btn2.grid(row=4, column=1)
