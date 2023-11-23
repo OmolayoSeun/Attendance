@@ -35,7 +35,6 @@ def __saveAdmin(compName: str, bizType: str, pwd: str, comPwd: str, notifyTop: L
     pass
 
 
-# 004
 def registerAdmin():
     clear_content()
     frame = Frame(v.app)
@@ -44,7 +43,7 @@ def registerAdmin():
     configFrame(frame)
 
     v.holdFrameReference = frame
-    # backList.append("004")
+    v.currentView  = v.viewRegister
 
     notifyTop = Label(frame, text="")
     Label(frame, text="Company Name: ").grid(row=1, column=0, sticky="w")
@@ -79,14 +78,14 @@ def registerAdmin():
     frame.place(x=cenX, y=cenY)
 
 
-# 005
 def adminPage1():
     clear_content()
     frame = Frame(v.app)
     configFrame(frame)
 
     v.holdFrameReference = frame
-    # backList.append("005")
+    v.currentView = v.viewAdmin1
+
     __getInfoFromDB()
     configLabel(Label(frame, text=f"Company Name: {adminInfo[1]}")).grid(row=0, column=0, pady=10)
     configLabel(Label(frame, text=f"Business Type: {adminInfo[2]}")).grid(row=0, column=1)

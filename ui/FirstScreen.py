@@ -12,14 +12,12 @@ def button_click(call):
         loginPage()
 
 
-# 001
 def firstPage():
-    #clear_content()
+    clear_content()
     frame = Frame(v.app)
     configFrame(frame)
 
     v.holdFrameReference = frame
-    #backList.append("001")
 
     v.app.update_idletasks()
     btn1 = Button(frame, text="Signing Page", width=20, border=0, cursor='hand2',

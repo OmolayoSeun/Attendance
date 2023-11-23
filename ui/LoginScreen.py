@@ -35,9 +35,6 @@ def __nextLogin(e1: Entry, e2: Entry, frame):
     pass
 
 
-
-
-# 002
 def loginPage():
     clear_content()
     frame = Frame(v.app)
@@ -46,22 +43,24 @@ def loginPage():
     configFrame(frame)
 
     v.holdFrameReference = frame
-    # TODO Back list for going back
-    #backList.append("002")
+    v.currentView = v.viewLogin
 
-    Label(frame, text="Company Name: ").grid(row=0, column=0, sticky="w")
-    Label(frame, text="Company password: ").grid(row=1, column=0, sticky="w")
-    compName = ttk.Entry(frame, width=35)
-    compPassword = ttk.Entry(frame, width=35)
+    configLabel(Label(frame, text="Company Name: ")).grid(row=0, column=0, sticky="w")
+    configLabel(Label(frame, text="Company password: ")).grid(row=2, column=0, sticky="w")
+    compName = ttk.Entry(frame, font=('ariel', '20', 'normal'))
+    compPassword = ttk.Entry(frame, font=('ariel', '20', 'normal'))
 
-    btn1 = Button(frame, text="Register", padx=10, command=registerAdmin)
-    btn2 = Button(frame, text="Login", padx=10, command=lambda: __nextLogin(compName, compPassword, frame))
+    add_hint(compName, "Enter Company Name")
+    add_hint(compPassword, "Enter Company Password")
 
-    btn1.grid(row=2, column=1)
-    btn2.grid(row=2, column=2)
+    btn1 = configDefBtn(Button(frame, text="Register", padx=10, command=registerAdmin))
+    btn2 = configDefBtn(Button(frame, text="Login", padx=10, command=lambda: __nextLogin(compName, compPassword, frame)))
 
-    compName.grid(row=0, column=1, columnspan=2)
-    compPassword.grid(row=1, column=1, columnspan=2)
+    btn1.grid(row=4, column=0)
+    btn2.grid(row=4, column=1)
+
+    compName.grid(row=1, column=0, columnspan=2, pady=5)
+    compPassword.grid(row=3, column=0, columnspan=2, pady=5)
 
     v.app.update_idletasks()
     cenX = (v.app.winfo_width() - frame.winfo_reqwidth()) // 2

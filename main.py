@@ -1,19 +1,18 @@
 from tkinter import *
 from tkinter import ttk
-from resources.Variables import Variables as v
-from  resources.Images import Image
 
-from PIL import ImageTk, Image
 from resources.Colors import Color as color
 from resources.Images import *
+from resources.Variables import Variables as v
 from ui.AddEmployeeScreen import addEmployeePage
-from ui.AdminScreen import adminPage1
+from ui.AdminScreen import adminPage1, registerAdmin
 from ui.FirstScreen import firstPage
+from ui.LoginScreen import loginPage
 
 v.app = Tk()
 v.app.title("Attendance Application")
 
-#v.app.iconbitmap('image.jpg')
+# v.app.iconbitmap('image.jpg')
 v.app.geometry("1100x700")
 v.app.resizable(width=False, height=False)
 justOpened = False
@@ -35,53 +34,29 @@ Images.imageBackArrow = ImageTk.PhotoImage(Image.open('img/left-arrow.png'))
 backBtn = Button(v.app, image=Images.imageBackArrow, pady=10, padx=20, background=color.white, border=0)
 backBtn.grid(sticky="nw")
 
-# make the next button appear at the bottom
-nextBtn = Button(v.app, text="Next", padx=20, pady=10, anchor="se")
-# nextBtn.grid(sticky="es")
 
-isOpened = Frame
-
-
-# callerID = "001"
-
-
-
-
-
-
-
-#
-# def switch():
-#     clear_content()
-#     print(backList)
-#     try:
-#         backList.pop()
-#         if backList[-1] == "001":
-#             firstPage()
-#         elif backList[-1] == "002":
-#             loginPage()
-#         elif backList[-1] == "003":
-#             splashScreen()
-#         elif backList[-1] == "004":
-#             registerAdmin()
-#         elif backList[-1] == "005":
-#             adminPage1()
-#         elif backList[-1] == "006":
-#             adminPage2()
-#         elif backList[-1] == "007":
-#             addEmployeePage()
-#         elif backList[-1] == "008":
-#             addEmployeeNextPage()
-#         elif backList[-1] == "009":
-#             signingPage()
-#     except IndexError:
-#         print("Empty List")
-#         firstPage()
+def back():
+    print(v.currentView)
+    if v.currentView == v.viewLogin:
+        firstPage()
+    elif v.currentView == v.viewAdmin1:
+        loginPage()
+    elif v.currentView == v.viewAdmin2:
+        adminPage1()
+    elif v.currentView == v.viewEmp:
+        adminPage1()
+    elif v.currentView == v.viewEmpNext:
+        addEmployeePage()
+    elif v.currentView == v.viewRegister:
+        registerAdmin()
+    pass
 
 
-# firstPage()
-#backBtn.config(command=switch)
+#nextBtn = Button(v.app, text="Next", padx=20, pady=10, anchor="se", command=back)
+
+backBtn.config(command=back)
+
+loginPage()
+
 #firstPage()
-#adminPage1()
-addEmployeePage()
 v.app.mainloop()

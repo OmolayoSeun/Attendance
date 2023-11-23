@@ -53,7 +53,7 @@ class DB:
         return rows[0]
 
     @staticmethod
-    def saveEmpInfo(Eid: str, fName: str, mName: str, lName: str, phone: str, email: str, pos: str):
+    def saveEmpInfo(UID: str, fName: str, mName: str, lName: str, phone: str, email: str, pos: str):
         DB.openDB()
         cursor = DB.conn.cursor()
         try:
@@ -63,7 +63,7 @@ class DB:
             print(e)
             pass
         try:
-            cursor.execute("INSERT INTO Employee VALUES ( ?, ?, ?, ?, ? , ?, ?)", ( Eid, fName, mName, lName, phone, email, pos,))
+            cursor.execute("INSERT INTO Employee VALUES ( ?, ?, ?, ?, ? , ?, ?)", (UID, fName, mName, lName, phone, email, pos,))
             cursor.close()
             DB.conn.commit()
             DB.closeDB()
@@ -76,11 +76,11 @@ class DB:
     pass
 
     @staticmethod
-    def getEmpInfo(Eid: str):
+    def getEmpInfo(UID: str):
         DB.openDB()
         cursor = DB.conn.cursor()
         try:
-            rows = cursor.execute("SELECT * FROM Employee WHERE id = ?", (Eid,)).fetchone()
+            rows = cursor.execute("SELECT * FROM Employee WHERE id = ?", (UID,)).fetchone()
             print(rows)
         except Error as e:
             rows = [[]]

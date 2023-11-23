@@ -25,14 +25,13 @@ def __keepEmpDetails(fName: str, mName: str, lName: str, phone: str, email: str,
     pass
 
 
-# 007
 def addEmployeePage():
     clear_content()
     frame = Frame(v.app)
     configFrame(frame)
 
     v.holdFrameReference = frame
-    # backList.append("007")
+    v.currentView = v.viewEmp
 
     configLabel(Label(frame, text="First Name: ")).grid(row=0, column=0, sticky="w")
     configLabel(Label(frame, text="Middle Name: ")).grid(row=1, column=0, sticky="w")
@@ -76,14 +75,13 @@ def addEmployeePage():
     pass
 
 
-# 008
 def addEmployeeNextPage():
     clear_content()
     frame = Frame(v.app)
     configFrame(frame)
 
     v.holdFrameReference = frame
-    # backList.append("008")
+    v.currentView = v.viewEmpNext
 
     text = configLabel(Label(frame, text="Put Right index Finger on the sensor", fg="red"))
     left = configLabel(Label(frame, image=Images.imageLeftHand))
