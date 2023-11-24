@@ -5,7 +5,7 @@ from resources.Colors import Color as color
 from resources.Images import *
 from resources.Variables import Variables as v
 from ui.AddEmployeeScreen import addEmployeePage
-from ui.AdminScreen import adminPage1, registerAdmin
+from ui.AdminScreen import adminPage1, registerAdmin, adminPage2
 from ui.FirstScreen import firstPage
 from ui.LoginScreen import loginPage
 
@@ -48,7 +48,7 @@ def back():
     elif v.currentView == v.viewEmpNext:
         addEmployeePage()
     elif v.currentView == v.viewRegister:
-        registerAdmin()
+        loginPage()
     pass
 
 
@@ -56,7 +56,7 @@ def back():
 
 backBtn.config(command=back)
 
-loginPage()
-
+#loginPage()
+adminPage2(0)
 #firstPage()
 v.app.mainloop()

@@ -30,7 +30,7 @@ def __nextLogin(e1: Entry, e2: Entry, frame):
         txt = Label(frame, text="User does not exit")
         txt.config(fg="red")
         txt.grid(row=3, column=1)
-    elif username == "" or password == "":
+    elif username == "" or password == "" or username == "Enter Company Name" or password == "Enter Company Password":
         txt = Label(frame, text="Empty Fields")
         txt.config(fg="red")
         txt.grid(row=3, column=1)
@@ -47,13 +47,14 @@ def __nextLogin(e1: Entry, e2: Entry, frame):
 def loginPage():
     clear_content()
     frame = Frame(v.app)
-    frame.columnconfigure(0, weight=0)
-    frame.columnconfigure(1, weight=0)
+    frame.columnconfigure(0, weight=1)
+    frame.columnconfigure(1, weight=1)
     configFrame(frame)
+
 
     style = ttk.Style()
     # Configure the style for the Entry widget
-    style.configure('Custom.TEntry', foreground='blue', font=('Arial', 12))
+    style.configure('Custom.TEntry', foreground='blue', font=('Arial', 120))
     style.map('Custom.TEntry',
               fieldbackground=[('focus', 'yellow'), ('!focus', 'white')],
               foreground=[('disabled', 'grey')])
@@ -61,23 +62,25 @@ def loginPage():
     v.holdFrameReference = frame
     v.currentView = v.viewLogin
 
-    configLabel(Label(frame, text="Company Name: ")).grid(row=0, column=0, sticky="w")
-    configLabel(Label(frame, text="Company password: ")).grid(row=2, column=0, sticky="w")
-    compName = ttk.Entry(frame, style='Custom.TEntry')
-    compPassword = ttk.Entry(frame, font=('ariel', '20', 'normal'))
+    configLabel(Label(frame, text="Company Name: ", font=('ariel', '12', "normal" ), foreground="grey")).grid(row=0, column=0, columnspan=3, sticky="w")
+    configLabel(Label(frame, text="Company password: ", font=('ariel', '12', "normal" ), foreground="grey", pady=5)).grid(row=2, column=0,  columnspan=3, sticky="w")
+    compName = ttk.Entry(frame,  width=35)
+    compPassword = ttk.Entry(frame, width=35)
 
     add_hint(compName, "Enter Company Name")
     add_hint(compPassword, "Enter Company Password")
 
-    btn1 = configDefBtn(Button(frame, text="Register", padx=10, command=registerAdmin))
-    btn2 = configDefBtn(
-        Button(frame, text="Login", padx=10, command=lambda: __nextLogin(compName, compPassword, frame)))
+    btn1 = configDefBtn(Button(frame, text="Register", command=registerAdmin))
+    btn2 = configDefBtn(Button(frame, text="Login", padx=10, command=lambda: __nextLogin(compName, compPassword, frame)))
 
-    btn1.grid(row=4, column=0)
-    btn2.grid(row=4, column=1)
+    configButton(btn1)
+    configButton(btn2)
 
-    compName.grid(row=1, column=0, columnspan=2, pady=5)
-    compPassword.grid(row=3, column=0, columnspan=2, pady=5)
+    btn1.grid(row=4, column=0, pady=5, sticky="nswe")
+    btn2.grid(row=4, column=2, pady=5, sticky="nswe")
+
+    compName.grid(row=1, column=0, columnspan=3, pady=5, ipady=5)
+    compPassword.grid(row=3, column=0, columnspan=3, pady=0, ipady=5)
 
     v.app.update_idletasks()
     cenX = (v.app.winfo_width() - frame.winfo_reqwidth()) // 2
