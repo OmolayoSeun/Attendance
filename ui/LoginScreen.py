@@ -6,38 +6,27 @@ from tools.Configure import *
 from ui.AdminScreen import adminPage1, registerAdmin
 from database.DB import DB
 
-
-# def style(tkinterObj: ttk.Style()):
-#     style = tkinterObj
-#     # Configure the style for the Entry widget
-#     style.configure('Custom.TEntry', foreground='blue', font=('Arial', 12))
-#     style.map('Custom.TEntry',
-#               fieldbackground=[('focus', 'yellow'), ('!focus', 'white')],
-#               foreground=[('disabled', 'grey')])
-
-
 def __nextLogin(e1: Entry, e2: Entry, frame):
     username = e1.get()
     password = e2.get()
 
     adminInfo = DB.getAdminInfo()
 
-    # ssid = None
     print(username)
     if username == adminInfo[1] and password == adminInfo[-1]:
         adminPage1()
     elif adminInfo[1] is None:
-        txt = Label(frame, text="User does not exit")
+        txt = configLabel(Label(frame, text="User does not exit"))
         txt.config(fg="red")
-        txt.grid(row=3, column=1)
+        txt.grid(row=5, column=1)
     elif username == "" or password == "" or username == "Enter Company Name" or password == "Enter Company Password":
-        txt = Label(frame, text="Empty Fields")
+        txt = configLabel(Label(frame, text="Empty Fields"))
         txt.config(fg="red")
-        txt.grid(row=3, column=1)
+        txt.grid(row=5, column=1)
     else:
-        txt = Label(frame, text="Invalid Password!")
+        txt = configLabel(Label(frame, text="Invalid Password!"))
         txt.config(fg="red")
-        txt.grid(row=3, column=1)
+        txt.grid(row=5, column=1)
 
     # should trow an error dialog
 
@@ -62,8 +51,8 @@ def loginPage():
     v.holdFrameReference = frame
     v.currentView = v.viewLogin
 
-    configLabel(Label(frame, text="Company Name: ", font=('ariel', '12', "normal" ), foreground="grey")).grid(row=0, column=0, columnspan=3, sticky="w")
-    configLabel(Label(frame, text="Company password: ", font=('ariel', '12', "normal" ), foreground="grey", pady=5)).grid(row=2, column=0,  columnspan=3, sticky="w")
+    configLabel(Label(frame, text="Company Name: ", font=('ariel', '12', "normal"), foreground="grey")).grid(row=0, column=0, columnspan=3, sticky="w")
+    configLabel(Label(frame, text="Company password: ", font=('ariel', '12', "normal"), foreground="grey", pady=5)).grid(row=2, column=0,  columnspan=3, sticky="w")
     compName = ttk.Entry(frame,  width=35)
     compPassword = ttk.Entry(frame, width=35)
 

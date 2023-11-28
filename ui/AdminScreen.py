@@ -91,6 +91,10 @@ def adminPage1():
         row_id = treeview.identify_row(event.y)  # Get the ID of the clicked row
         index = treeview.index(row_id)  # Get the index of the clicked row
         print(f"You clicked on row index: {index}")
+        adminPage2(index)
+
+    def on_mousewheel(event):
+        canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
 
     clear_content()
     frame = Frame(v.app)
@@ -104,15 +108,31 @@ def adminPage1():
     configLabel(Label(frame, text=f"Business Type: {adminInfo[2]}")).grid(row=0, column=1)
 
     # Create the treeview widget
-    treeview = ttk.Treeview(frame, columns=("First Name", "Middle Name", "Last Name", "Phone No.", "Email", "Position"),
+    canvas = tk.Canvas(frame, background=color.white, width=1000)
+    canvas.grid(row=1, column=0, columnspan=7)
+
+    # Add a scrollbar for the canvas (vertical scrolling)
+    scrollbar = tk.Scrollbar(frame, command=canvas.yview, background=color.white)
+    scrollbar.grid(row=1, column=6, sticky='nse')
+
+    # Configure the canvas to use the scrollbar
+    canvas.configure(yscrollcommand=scrollbar.set)
+    canvas.bind_all("<MouseWheel>", on_mousewheel)
+
+    # Create another frame to hold the content inside the canvas
+    content_frame = tk.Frame(canvas)
+    canvas.create_window((0, 0), window=content_frame, anchor="nw")
+
+    treeview = ttk.Treeview(content_frame, height=13,
+                            columns=("First Name", "Middle Name", "Last Name", "Phone No.", "Email", "Position"),
                             show="headings")
 
-    treeview.column("#1", width=150)
-    treeview.column("#2", width=150)
-    treeview.column("#3", width=150)
-    treeview.column("#4", width=150)
-    treeview.column("#5", width=150)
-    treeview.column("#6", width=150)
+    treeview.column("#1", width=166)
+    treeview.column("#2", width=167)
+    treeview.column("#3", width=167)
+    treeview.column("#4", width=168)
+    treeview.column("#5", width=167)
+    treeview.column("#6", width=167)
 
     # Define the column headings
     treeview.heading("#1", text="First Name")
@@ -129,7 +149,11 @@ def adminPage1():
         treeview.bind("<ButtonRelease-1>", on_treeview_click)
 
     # Pack the treeview widget into the main window
-    treeview.grid(row=1, column=0, columnspan=7)
+    treeview.pack()
+
+    # Update the scrollable region
+    content_frame.update_idletasks()
+    canvas.configure(scrollregion=canvas.bbox("all"))
 
     configDefBtn(Button(frame, text="Add +", command=lambda: addEmployeePage())).grid(row=2, column=6,
                                                                                       pady=5, sticky='we')
@@ -142,7 +166,6 @@ def adminPage1():
     pass
 
 
-# 006
 def adminPage2(index: int):
     __getInfoFromDB()
 

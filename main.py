@@ -57,6 +57,7 @@ def back():
 backBtn.config(command=back)
 
 #loginPage()
-adminPage2(0)
+#adminPage1()
 #firstPage()
+addEmployeePage()
 v.app.mainloop()

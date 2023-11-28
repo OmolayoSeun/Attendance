@@ -1,3 +1,5 @@
+from tkinter import ttk
+
 from resources.Images import Images
 from resources.Variables import Variables as v
 from tools.ClearContent import clear_content
@@ -13,19 +15,30 @@ def save():
     pass
 
 
-def __keepEmpDetails(fName: str, mName: str, lName: str, phone: str, email: str, position: str):
-    empDetails.append(fName)
-    empDetails.append(mName)
-    empDetails.append(lName)
-    empDetails.append(phone)
-    empDetails.append(email)
-    empDetails.append(position)
+def __keepEmpDetails( frame,fName: str, mName: str, lName: str, phone: str, email: str, position: str):
 
-    addEmployeeNextPage()
+    if fName == "Enter first name" or mName == "Enter middle name" or lName == "Enter last name" or\
+        phone == "Enter phone no" or email == "Enter email" or position == "Enter position" or \
+            fName == "" or mName == "" or lName == "" or phone == "" or email == "" or position == "":
+        l = configLabel(Label(frame, text="Empty fields"))
+        l.config(fg="red")
+        l.grid(row=18, column=0, columnspan=3)
+
+    else:
+        empDetails.append(fName)
+        empDetails.append(mName)
+        empDetails.append(lName)
+        empDetails.append(phone)
+        empDetails.append(email)
+        empDetails.append(position)
+        addEmployeeNextPage()
     pass
 
 
 def addEmployeePage():
+
+
+
     clear_content()
     frame = Frame(v.app)
     configFrame(frame)
@@ -33,39 +46,46 @@ def addEmployeePage():
     v.holdFrameReference = frame
     v.currentView = v.viewEmp
 
-    configLabel(Label(frame, text="First Name: ")).grid(row=0, column=0, sticky="w")
-    configLabel(Label(frame, text="Middle Name: ")).grid(row=1, column=0, sticky="w")
-    configLabel(Label(frame, text="Last Name: ")).grid(row=2, column=0, sticky="w")
-    configLabel(Label(frame, text="Phone No: ")).grid(row=3, column=0, sticky="w")
-    configLabel(Label(frame, text="Email: ")).grid(row=4, column=0, sticky="w")
-    configLabel(Label(frame, text="Position: ")).grid(row=5, column=0, sticky="w")
+    configLabel(Label(frame, text="First Name: ", anchor='w')).grid(row=0, column=0, sticky="w")
+    configLabel(Label(frame, text="Middle Name: ")).grid(row=3, column=0, sticky="w")
+    configLabel(Label(frame, text="Last Name: ")).grid(row=6, column=0, sticky="w")
+    configLabel(Label(frame, text="Phone No: ")).grid(row=9, column=0, sticky="w")
+    configLabel(Label(frame, text="Email: ")).grid(row=12, column=0, sticky="w")
+    configLabel(Label(frame, text="Position: ")).grid(row=15, column=0, sticky="w")
 
-    firstName = (Entry(frame, width=35, borderwidth=5))
-    middleName = Entry(frame, width=35, borderwidth=5)
-    lastName = Entry(frame, width=35, borderwidth=5)
-    phone = Entry(frame, width=35, borderwidth=5)
-    email = Entry(frame, width=35, borderwidth=5)
-    position = Entry(frame, width=35, borderwidth=5)
+    Label(frame, font=('ariel', '5', 'normal'), bg=color.white).grid(row=2, column=1)
+    Label(frame, font=('ariel', '5', 'normal'), bg=color.white).grid(row=5, column=1)
+    Label(frame, font=('ariel', '5', 'normal'), bg=color.white).grid(row=8, column=1)
+    Label(frame, font=('ariel', '5', 'normal'), bg=color.white).grid(row=11, column=1)
+    Label(frame, font=('ariel', '5', 'normal'), bg=color.white).grid(row=14, column=1)
+
+    firstName = ttk.Entry(frame, width=35)
+    middleName = ttk.Entry(frame, width=35)
+    lastName = ttk.Entry(frame, width=35)
+    phone = ttk.Entry(frame, width=35)
+    email = ttk.Entry(frame, width=35)
+    position = ttk.Entry(frame, width=35)
+
+    add_hint( firstName, "Enter first name")
+    add_hint( middleName, "Enter middle name")
+    add_hint( lastName, "Enter last name")
+    add_hint( phone, "Enter phone no")
+    add_hint( email, "Enter email")
+    add_hint( position, "Enter position")
 
     btn = Button(frame, text="Next", padx=10,
-                 command=lambda: __keepEmpDetails(firstName.get(), middleName.get(), lastName.get(),
+                 command=lambda: __keepEmpDetails(frame, firstName.get(), middleName.get(), lastName.get(),
                                                   phone.get(), email.get(), position.get()))
-    configEntry(firstName)
-    configEntry(middleName)
-    configEntry(lastName)
-    configEntry(phone)
-    configEntry(email)
-    configEntry(position)
     configButton(btn)
 
-    firstName.grid(row=0, column=1, columnspan=3, pady=5)
-    middleName.grid(row=1, column=1, columnspan=3)
-    lastName.grid(row=2, column=1, columnspan=3, pady=5)
-    phone.grid(row=3, column=1, columnspan=3)
-    email.grid(row=4, column=1, columnspan=3, pady=5)
-    position.grid(row=5, column=1, columnspan=3)
-    # btn1.pack()
-    btn.grid(row=6, column=2, pady=5)
+    firstName.grid(row=1, column=0, columnspan=3, ipady=5)
+    middleName.grid(row=4, column=0, columnspan=3, ipady=5)
+    lastName.grid(row=7, column=0, columnspan=3, ipady=5)
+    phone.grid(row=10, column=0, columnspan=3, ipady=5)
+    email.grid(row=13, column=0, columnspan=3, ipady=5)
+    position.grid(row=16, column=0, columnspan=3, ipady=5)
+
+    btn.grid(row=17, column=0, columnspan=3, pady=10 , sticky='we')
 
     v.app.update_idletasks()
     cenX = (v.app.winfo_width() - frame.winfo_reqwidth()) // 2
