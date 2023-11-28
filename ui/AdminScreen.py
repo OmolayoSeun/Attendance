@@ -1,3 +1,4 @@
+import tkinter
 from tkinter import ttk
 
 from database.DB import DB
@@ -172,6 +173,22 @@ def adminPage2(index: int):
     def on_mousewheel(event):
         canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
 
+    def create_bar_graph(canvasObj: tkinter.Canvas, value1, value2, value3):
+        size = 9
+        total = value1 + value2 + value3
+        if total == 0:
+            value3 = 100
+            total = 100
+        percentage1 = (value1 / total) * 100
+        percentage2 = (value2 / total) * 100
+        percentage3 = (value3 / total) * 100
+
+        canvasObj.delete("all")
+        canvasObj.create_rectangle(0, 0, percentage1 * size, 30, fill=color.green)
+        canvasObj.create_rectangle(percentage1 * size, 0, (percentage1 * size) + (percentage2 * size), 30, fill="red")
+        canvasObj.create_rectangle((percentage1 * size) + (percentage2 * size), 0,
+                                   (percentage1 * size) + (percentage2 * size) + (percentage3 * size), 30, fill="grey")
+
     clear_content()
     frame = Frame(v.app)
     configFrame(frame)
@@ -232,6 +249,13 @@ def adminPage2(index: int):
     # Update the scrollable region
     content_frame.update_idletasks()
     canvas.configure(scrollregion=canvas.bbox("all"))
+
+    configLabel(Label(frame, text="Sign-In Stat")).grid(row=6, column=0, pady=5)
+    barGraph1 = tk.Canvas(frame, width=898, height=25, bg=color.white, borderwidth=0)
+    barGraph1.grid(row=7, column=0, columnspan=4)
+    create_bar_graph(barGraph1, 10, 17, 2)
+
+    configLabel(Label(frame, text="Sign-Out Stat")).grid(row=8, column=0, pady=5)
 
     v.app.update_idletasks()
     cenX = (v.app.winfo_width() - frame.winfo_reqwidth()) // 2
