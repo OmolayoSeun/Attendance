@@ -51,13 +51,13 @@ def loginPage():
     v.holdFrameReference = frame
     v.currentView = v.viewLogin
 
-    configLabel(Label(frame, text="Company Name: ", font=('ariel', '12', "normal"), foreground="grey")).grid(row=0, column=0, columnspan=3, sticky="w")
-    configLabel(Label(frame, text="Company password: ", font=('ariel', '12', "normal"), foreground="grey", pady=5)).grid(row=2, column=0,  columnspan=3, sticky="w")
+    configLabel(Label(frame, text="Hospital Name: ", font=('ariel', '12', "normal"), foreground="grey")).grid(row=0, column=0, columnspan=3, sticky="w")
+    configLabel(Label(frame, text="Password: ", font=('ariel', '12', "normal"), foreground="grey", pady=5)).grid(row=2, column=0,  columnspan=3, sticky="w")
     compName = ttk.Entry(frame,  width=35)
     compPassword = ttk.Entry(frame, width=35)
 
-    add_hint(compName, "Enter Company Name")
-    add_hint(compPassword, "Enter Company Password")
+    add_hint(compName, "Hospital Name")
+    add_hint(compPassword, "Password")
 
     btn1 = configDefBtn(Button(frame, text="Register", command=registerAdmin))
     btn2 = configDefBtn(Button(frame, text="Login", padx=10, command=lambda: __nextLogin(compName, compPassword, frame)))

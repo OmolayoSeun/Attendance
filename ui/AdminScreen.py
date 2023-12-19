@@ -18,10 +18,10 @@ def __getInfoFromDB():
     empInfo = DB.getEmpList()
 
 
-def __saveAdmin(compName: str, bizType: str, pwd: str, comPwd: str, notifyTop: Label, notify: Label):
-    if compName == "Enter name" or bizType == "Enter business type" \
+def __saveAdmin(hospitalName: str, bizType: str, pwd: str, comPwd: str, notifyTop: Label, notify: Label):
+    if hospitalName == "Enter name" or bizType == "Enter business type" \
             or pwd == "Enter password" or comPwd == "Confirm password" \
-            or compName == "" or bizType == "" or pwd == "" or comPwd == "":
+            or hospitalName == "" or bizType == "" or pwd == "" or comPwd == "":
         notifyTop.config(text="Empty Fields!", fg="red")
         return
     elif pwd != comPwd:
@@ -29,7 +29,7 @@ def __saveAdmin(compName: str, bizType: str, pwd: str, comPwd: str, notifyTop: L
         return
     else:
         from ui.LoginScreen import loginPage
-        result = DB.saveAdminInfo(compName, bizType, pwd)
+        result = DB.saveAdminInfo(hospitalName, bizType, pwd)
         if result:
             loginPage()
         else:
@@ -49,36 +49,36 @@ def registerAdmin():
     v.currentView = v.viewRegister
 
     notifyTop = configLabel(Label(frame, text=""))
-    configLabel(Label(frame, text="Company Name: ")).grid(row=1, column=0, sticky="w")
-    configLabel(Label(frame, text="Business Type: ")).grid(row=4, column=0, sticky="w")
+    configLabel(Label(frame, text="Hospital Name: ")).grid(row=1, column=0, sticky="w")
+    #configLabel(Label(frame, text="Business Type: ")).grid(row=4, column=0, sticky="w")
     Label(frame, text="", font=('ariel', '1'), bg=color.white).grid(row=3, column=0)
-    Label(frame, text="", font=('ariel', '1'), bg=color.white).grid(row=9, column=0)
+    Label(frame, text="", font=('ariel', '1'), bg=color.white).grid(row=8, column=0)
     notify = configLabel(Label(frame, text=""))
-    configLabel(Label(frame, text="Password: ")).grid(row=7, column=0, sticky="w")
-    configLabel(Label(frame, text="Confirm Password: ")).grid(row=10, column=0, sticky="w")
+    configLabel(Label(frame, text="Password: ")).grid(row=6, column=0, sticky="w")
+    configLabel(Label(frame, text="Confirm Password: ")).grid(row=9, column=0, sticky="w")
 
     compName = ttk.Entry(frame, width=35)
-    bizType = ttk.Entry(frame, width=35)
+    #bizType = ttk.Entry(frame, width=35)
     pwd = ttk.Entry(frame, width=35)
     comPwd = ttk.Entry(frame, width=35)
 
-    add_hint(compName, "Enter name")
-    add_hint(bizType, "Enter business type")
-    add_hint(pwd, "Enter password")
+    add_hint(compName, "Hospital Name")
+    #add_hint(bizType, "Enter business type")
+    add_hint(pwd, "Password")
     add_hint(comPwd, "Confirm password")
 
     btn = Button(frame, text="Register", padx=40,
-                 command=lambda: __saveAdmin(compName.get(), bizType.get(),
+                 command=lambda: __saveAdmin(compName.get(),
                                              pwd.get(), comPwd.get(), notifyTop, notify))
     configButton(btn)
 
     notifyTop.grid(row=0, column=0)
-    notify.grid(row=6, column=0)
+    notify.grid(row=5, column=0)
     compName.grid(row=2, column=0, ipady=5)
-    bizType.grid(row=5, column=0, ipady=5)
-    pwd.grid(row=8, column=0, ipady=5)
-    comPwd.grid(row=11, column=0, ipady=5)
-    btn.grid(row=12, column=0, pady=5)
+    #bizType.grid(row=4, column=0, ipady=5)
+    pwd.grid(row=7, column=0, ipady=5)
+    comPwd.grid(row=10, column=0, ipady=5)
+    btn.grid(row=11, column=0, pady=5)
 
     v.app.update_idletasks()
     cenX = (v.app.winfo_width() - frame.winfo_reqwidth()) // 2
@@ -105,8 +105,8 @@ def adminPage1():
     v.currentView = v.viewAdmin1
 
     __getInfoFromDB()
-    configLabel(Label(frame, text=f"Company Name: {adminInfo[1]}")).grid(row=0, column=0, pady=10, sticky='w')
-    configLabel(Label(frame, text=f"Business Type: {adminInfo[2]}")).grid(row=0, column=1)
+
+    configLabel(Label(frame, text="Records")).grid(row=0, column=3, columnspan=2,pady=10)
 
     # Create the treeview widget
     canvas = tk.Canvas(frame, background=color.white, width=1000)
@@ -189,6 +189,23 @@ def adminPage2(index: int):
         canvasObj.create_rectangle((percentage1 * size) + (percentage2 * size), 0,
                                    (percentage1 * size) + (percentage2 * size) + (percentage3 * size), 30, fill="grey")
 
+    def enter(event=None):
+        #barGraph1.close()
+        x, y, cx, cy = barGraph1.bbox("insert")
+        x += barGraph1.winfo_rootx() + 25
+        y += barGraph1.winfo_rooty() + 20
+        barGraph1.tw = tk.Toplevel(barGraph1)
+        barGraph1.tw.wm_overrideredirect(True)
+        barGraph1.tw.wm_geometry("+%d+%d" % (x, y))
+        popText = tk.Label(barGraph1.tw, text="hello", justify='left',
+                           background="#ffffff", relief='solid', borderwidth=1,
+                           font=("times", "8", "normal"))
+        popText.pack(ipadx=1)
+
+    def close(event=None):
+        if barGraph1.tw:
+            barGraph1.tw.destroy()
+
     clear_content()
     frame = Frame(v.app)
     configFrame(frame)
@@ -252,10 +269,19 @@ def adminPage2(index: int):
 
     configLabel(Label(frame, text="Sign-In Stat")).grid(row=6, column=0, pady=5)
     barGraph1 = tk.Canvas(frame, width=898, height=25, bg=color.white, borderwidth=0)
+
+    barGraph1.bind("<Enter>", enter)
+    barGraph1.bind("<Leave>", close)
+    barGraph1.id = None
+    barGraph1.tw = None
+
     barGraph1.grid(row=7, column=0, columnspan=4)
     create_bar_graph(barGraph1, 10, 17, 2)
 
     configLabel(Label(frame, text="Sign-Out Stat")).grid(row=8, column=0, pady=5)
+    barGraph2 = tk.Canvas(frame, width=898, height=25, bg=color.white, borderwidth=0)
+    barGraph2.grid(row=9, column=0, columnspan=4)
+    create_bar_graph(barGraph2, 1, 0, 2)
 
     v.app.update_idletasks()
     cenX = (v.app.winfo_width() - frame.winfo_reqwidth()) // 2

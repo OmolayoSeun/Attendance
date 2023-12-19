@@ -31,3 +31,4 @@ else:
 
 # Close connection to the database
 connection.close()
+#device_name = "9DFBF72D-0711-4D3A-9C2D-57B73A5E5F50"

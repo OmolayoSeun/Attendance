@@ -30,6 +30,8 @@ Images.imageLeftChecked = ImageTk.PhotoImage(Image.open('img/leftChecked.png'))
 Images.imageRightHand = ImageTk.PhotoImage(Image.open('img/right.png'))
 Images.imageRightChecked = ImageTk.PhotoImage(Image.open('img/rightChecked.png'))
 Images.imageBackArrow = ImageTk.PhotoImage(Image.open('img/left-arrow.png'))
+Images.imageRightTurn = ImageTk.PhotoImage(Image.open('img/rightTurn.png'))
+Images.imageLeftTurn = ImageTk.PhotoImage(Image.open('img/leftTurn.png'))
 
 backBtn = Button(v.app, image=Images.imageBackArrow, pady=10, padx=20, background=color.white, border=0)
 backBtn.grid(sticky="nw")
@@ -57,8 +59,8 @@ def back():
 backBtn.config(command=back)
 
 #loginPage()
-adminPage1()
+#adminPage1()
 
-#firstPage()
+firstPage()
 #addEmployeePage()
 v.app.mainloop()
