@@ -1,5 +1,7 @@
+import time
 from tkinter import ttk
 
+import threading
 from resources.Images import Images
 from resources.Variables import Variables as v
 from tools.ClearContent import clear_content
@@ -15,10 +17,9 @@ def save():
     pass
 
 
-def __keepEmpDetails( frame,fName: str, mName: str, lName: str, phone: str, email: str, position: str):
-
-    if fName == "Enter first name" or mName == "Enter middle name" or lName == "Enter last name" or\
-        phone == "Enter phone no" or email == "Enter email" or position == "Enter position" or \
+def __keepEmpDetails(frame, fName: str, mName: str, lName: str, phone: str, email: str, position: str):
+    if fName == "Enter first name" or mName == "Enter middle name" or lName == "Enter last name" or \
+            phone == "Enter phone no" or email == "Enter email" or position == "Enter position" or \
             fName == "" or mName == "" or lName == "" or phone == "" or email == "" or position == "":
         l = configLabel(Label(frame, text="Empty fields"))
         l.config(fg="red")
@@ -36,9 +37,6 @@ def __keepEmpDetails( frame,fName: str, mName: str, lName: str, phone: str, emai
 
 
 def addEmployeePage():
-
-
-
     clear_content()
     frame = Frame(v.app)
     configFrame(frame)
@@ -66,12 +64,12 @@ def addEmployeePage():
     email = ttk.Entry(frame, width=35)
     position = ttk.Entry(frame, width=35)
 
-    add_hint( firstName, "Enter first name")
-    add_hint( middleName, "Enter middle name")
-    add_hint( lastName, "Enter last name")
-    add_hint( phone, "Enter phone no")
-    add_hint( email, "Enter email")
-    add_hint( position, "Enter position")
+    add_hint(firstName, "Enter first name")
+    add_hint(middleName, "Enter middle name")
+    add_hint(lastName, "Enter last name")
+    add_hint(phone, "Enter phone no")
+    add_hint(email, "Enter email")
+    add_hint(position, "Enter position")
 
     btn = Button(frame, text="Next", padx=10,
                  command=lambda: __keepEmpDetails(frame, firstName.get(), middleName.get(), lastName.get(),
@@ -85,7 +83,7 @@ def addEmployeePage():
     email.grid(row=13, column=0, columnspan=3, ipady=5)
     position.grid(row=16, column=0, columnspan=3, ipady=5)
 
-    btn.grid(row=17, column=0, columnspan=3, pady=10 , sticky='we')
+    btn.grid(row=17, column=0, columnspan=3, pady=10, sticky='we')
 
     v.app.update_idletasks()
     cenX = (v.app.winfo_width() - frame.winfo_reqwidth()) // 2
@@ -95,7 +93,9 @@ def addEmployeePage():
     pass
 
 
+
 def addEmployeeNextPage():
+
     clear_content()
     frame = Frame(v.app)
     configFrame(frame)
@@ -103,12 +103,13 @@ def addEmployeeNextPage():
     v.holdFrameReference = frame
     v.currentView = v.viewEmpNext
 
-    text = configLabel(Label(frame, text="Put Right index Finger on the sensor", fg="red"))
+    text = configLabel(Label(frame, text="Put right index finger on the sensor"))
+    text.config(fg='red')
+
     left = configLabel(Label(frame, image=Images.imageLeftHand))
-    right = configLabel(Label(frame, image=Images.imageRightHand))
+    right = configLabel(Label(frame, image=Images.imageRightTurn))
     btn1 = Button(frame, text="Save", padx=10, command=save)
     configButton(btn1)
-    # frame.config(image=image1)
 
     text.grid(row=0, column=0, columnspan=3)
     left.grid(row=1, column=0)
@@ -120,4 +121,46 @@ def addEmployeeNextPage():
     cenY = ((v.app.winfo_height() - frame.winfo_reqheight()) // 2)
 
     frame.place(x=cenX, y=cenY)
+
+    from tools.Reader import Reader
+
+
+    def getFingerPrint():
+        global returnResult1
+        global returnResult2
+        a = False
+        while True:
+            returnResult1 = Reader.getFingerPrint(a)
+            if returnResult1 is None:
+                text.config(text="Failed")
+                time.sleep(3)
+                text.config(text="Put right index finger on the sensor")
+            else:
+                text.config(text="Right finger successful", fg='green')
+                time.sleep(3)
+                break
+            a = True
+
+        text.config(text="Put left index finger on the sensor", fg='red')
+        a = False
+        while True:
+            returnResult2 = Reader.getFingerPrint(a)
+            if returnResult2 is None:
+                text.config(text="Failed")
+                time.sleep(3)
+                text.config(text="Put left index finger on the sensor")
+            else:
+                text.config(text="Left finger successful", fg='green')
+                time.sleep(3)
+                break
+            a = True
+
+    #Reader.getFingerPrint(False)
+    print("hello1")
+
+    #Reader.getFingerPrint(True)
+    print("hello2")
+
+    thread = threading.Thread(target=getFingerPrint)
+    thread.start()
     pass

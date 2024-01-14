@@ -4,7 +4,7 @@ from tkinter import ttk
 from resources.Colors import Color as color
 from resources.Images import *
 from resources.Variables import Variables as v
-from ui.AddEmployeeScreen import addEmployeePage
+from ui.AddEmployeeScreen import addEmployeePage, addEmployeeNextPage
 from ui.AdminScreen import adminPage1, registerAdmin, adminPage2
 from ui.FirstScreen import firstPage
 from ui.LoginScreen import loginPage
@@ -61,6 +61,13 @@ backBtn.config(command=back)
 #loginPage()
 #adminPage1()
 
-firstPage()
-#addEmployeePage()
+#firstPage()
+
+
+
+#getFingerPrint()
+
+addEmployeeNextPage()
 v.app.mainloop()
+
+

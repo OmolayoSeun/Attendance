@@ -1,5 +1,6 @@
 # Boiler plate stuff to start the module
-import jpype.imports
+import jpype
+
 
 # Launch the JVM
 jpype.startJVM(classpath=['FReader.jar'])
