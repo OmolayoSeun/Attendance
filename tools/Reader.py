@@ -1,14 +1,16 @@
+from resources.Variables import Variables as v
 class Reader:
 
     @staticmethod
-    def getFingerPrint(warmStart):
+    def getFingerPrint():
         # Boilerplate stuff to start the module
         # time.sleep(3)
         import jpype.imports
 
         # Launch the JVM
-        if not warmStart:
+        if not v.initialiseJVM:
             jpype.startJVM(classpath=['FReader.jar'])
+            v.initialiseJVM = True
 
         # import the Java modules
         from com.OmolayoSeun import Action
@@ -21,12 +23,15 @@ class Reader:
         print(FPInfo)
 
         return FPInfo
+
     @staticmethod
-    def verifyFingerPrint(fingerPrint):
+    def verifyFingerPrint(fingerPrints):
         import jpype.imports
 
+        if not v.initialiseJVM:
+            jpype.startJVM(classpath=['FReader.jar'])
+            v.initialiseJVM = True
         # Launch the JVM
-        jpype.startJVM(classpath=['FReader.jar'])
 
         # import the Java modules
         from com.OmolayoSeun import Action
@@ -34,10 +39,18 @@ class Reader:
 
         DPSdk = SampleApp()
 
-        byte_arr = bytearray(fingerPrint)
+        FIndex = DPSdk.call(Action.VERIFY_USER, fingerPrints)
 
-        FPInfo = DPSdk.call(Action.VERIFY_USER, byte_arr)
+        # print("The index value is ",FIndex)
+        return FIndex
 
-        print(FPInfo)
+    # @staticmethod
+    # def verifyFingerPrint(fingerPrints):
+    #     return "0"
 
-
+# Error code ERR100 no fingerprint scanner
+# Error code ERR200 failed operation
+# Error code ERR300 no matching fingerprint
+# Error code ERR400
+#
+#

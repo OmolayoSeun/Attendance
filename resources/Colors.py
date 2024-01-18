@@ -5,4 +5,6 @@ class Color:
     white = 'WHITE'
     green = '#10ad09'
     grey = '#424242'
+    red = '#ff5733'
+    redHighlight = '#ee4b2b'
 

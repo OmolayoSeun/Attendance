@@ -18,10 +18,10 @@ def __getInfoFromDB():
     empInfo = DB.getEmpList()
 
 
-def __saveAdmin(hospitalName: str, bizType: str, pwd: str, comPwd: str, notifyTop: Label, notify: Label):
-    if hospitalName == "Enter name" or bizType == "Enter business type" \
+def __saveAdmin(hospitalName: str, pwd: str, comPwd: str, notifyTop: Label, notify: Label):
+    if hospitalName == "Enter name" \
             or pwd == "Enter password" or comPwd == "Confirm password" \
-            or hospitalName == "" or bizType == "" or pwd == "" or comPwd == "":
+            or hospitalName == "" or pwd == "" or comPwd == "":
         notifyTop.config(text="Empty Fields!", fg="red")
         return
     elif pwd != comPwd:
@@ -29,12 +29,23 @@ def __saveAdmin(hospitalName: str, bizType: str, pwd: str, comPwd: str, notifyTo
         return
     else:
         from ui.LoginScreen import loginPage
-        result = DB.saveAdminInfo(hospitalName, bizType, pwd)
+        result = DB.saveAdminInfo(hospitalName, pwd)
         if result:
             loginPage()
         else:
             notify.config(text="Can't create admin!", fg="red")
         # else will contain dialog for password does not match
+    pass
+
+
+def deleteUser(index: int):
+    result = DB.removeEmp(empInfo[index][0])
+    if result:
+        #alert dialog
+        adminPage1()
+    else:
+        #alert dialog
+        print("An error occured")
     pass
 
 
@@ -50,7 +61,6 @@ def registerAdmin():
 
     notifyTop = configLabel(Label(frame, text=""))
     configLabel(Label(frame, text="Hospital Name: ")).grid(row=1, column=0, sticky="w")
-    #configLabel(Label(frame, text="Business Type: ")).grid(row=4, column=0, sticky="w")
     Label(frame, text="", font=('ariel', '1'), bg=color.white).grid(row=3, column=0)
     Label(frame, text="", font=('ariel', '1'), bg=color.white).grid(row=8, column=0)
     notify = configLabel(Label(frame, text=""))
@@ -58,12 +68,10 @@ def registerAdmin():
     configLabel(Label(frame, text="Confirm Password: ")).grid(row=9, column=0, sticky="w")
 
     compName = ttk.Entry(frame, width=35)
-    #bizType = ttk.Entry(frame, width=35)
     pwd = ttk.Entry(frame, width=35)
     comPwd = ttk.Entry(frame, width=35)
 
     add_hint(compName, "Hospital Name")
-    #add_hint(bizType, "Enter business type")
     add_hint(pwd, "Password")
     add_hint(comPwd, "Confirm password")
 
@@ -75,7 +83,6 @@ def registerAdmin():
     notifyTop.grid(row=0, column=0)
     notify.grid(row=5, column=0)
     compName.grid(row=2, column=0, ipady=5)
-    #bizType.grid(row=4, column=0, ipady=5)
     pwd.grid(row=7, column=0, ipady=5)
     comPwd.grid(row=10, column=0, ipady=5)
     btn.grid(row=11, column=0, pady=5)
@@ -106,7 +113,7 @@ def adminPage1():
 
     __getInfoFromDB()
 
-    configLabel(Label(frame, text="Records")).grid(row=0, column=3, columnspan=2,pady=10)
+    configLabel(Label(frame, text="Records")).grid(row=0, column=3, columnspan=2, pady=10)
 
     # Create the treeview widget
     canvas = tk.Canvas(frame, background=color.white, width=1000)
@@ -143,7 +150,7 @@ def adminPage1():
     treeview.heading("#5", text="Email")
     treeview.heading("#6", text="Position")
 
-    if empInfo is not None:
+    if empInfo is not None and empInfo != [[]]:
         print(empInfo)
         for r in empInfo:
             treeview.insert("", 'end', values=(r[1], r[2], r[3], r[4], r[5], r[6]))
@@ -168,7 +175,7 @@ def adminPage1():
 
 
 def adminPage2(index: int):
-    __getInfoFromDB()
+    # __getInfoFromDB()
 
     def on_mousewheel(event):
         canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
@@ -190,7 +197,7 @@ def adminPage2(index: int):
                                    (percentage1 * size) + (percentage2 * size) + (percentage3 * size), 30, fill="grey")
 
     def enter(event=None):
-        #barGraph1.close()
+        # barGraph1.close()
         x, y, cx, cy = barGraph1.bbox("insert")
         x += barGraph1.winfo_rootx() + 25
         y += barGraph1.winfo_rooty() + 20
@@ -227,7 +234,12 @@ def adminPage2(index: int):
                                                                                              columnspan=2, sticky='w')
     configLabel(Label(frame, text=f"Email: {empInfo[index][5]}")).grid(row=1, column=2, columnspan=2, sticky='w')
     configLabel(Label(frame, text=f"Position: {empInfo[index][6]}")).grid(row=2, column=2, columnspan=2, sticky='w')
-    configLabel(Label(frame, text=f"Gender: {empInfo[index][6]}")).grid(row=3, column=0, columnspan=2, sticky='w')
+    # configLabel(Label(frame, text=f"Gender: {empInfo[index][6]}")).grid(row=3, column=0, columnspan=2, sticky='w')
+
+    configLabel(Label(frame, text="    ")).grid(row=10, column=3, pady=10)  # dummy label
+    delete = Button(frame, text="Delete", command=lambda: deleteUser(index))
+    configDeleteBtn(delete)
+    delete.grid(row=10, column=3, rowspan=1, pady=5, ipadx=10, sticky='e')
 
     Label(frame, text="Day", fg=color.white, bg=color.skyBlue, borderwidth=1, relief='solid',
           font=('ariel', '10', 'bold')) \

@@ -11,4 +11,4 @@ class Variables:
     viewRegister = "reg"
     viewEmp = "emp"
     viewEmpNext = "empNext"
-
+    initialiseJVM = False

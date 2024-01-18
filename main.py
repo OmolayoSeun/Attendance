@@ -54,20 +54,10 @@ def back():
     pass
 
 
-#nextBtn = Button(v.app, text="Next", padx=20, pady=10, anchor="se", command=back)
-
 backBtn.config(command=back)
 
-#loginPage()
-#adminPage1()
 
-#firstPage()
-
-
-
-#getFingerPrint()
-
-addEmployeeNextPage()
+firstPage()
 v.app.mainloop()
 
 

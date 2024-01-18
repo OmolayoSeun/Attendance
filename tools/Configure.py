@@ -25,20 +25,7 @@ def configEntry(item: Entry):
 
 
 def configButton(item: Button):
-    def on_enter(event):
-        item.config(bg=color.skyBlueHighlight, highlightcolor=color.green)  # Change background color when mouse enters
-
-    def on_leave(event):
-        item.config(bg=color.skyBlue, highlightcolor=color.green)
-
-    item.config(
-        background=color.skyBlue, foreground=color.white,
-        activebackground=color.green, activeforeground=color.white,
-        highlightthickness=2, highlightbackground=color.green, highlightcolor=color.green,
-        cursor="hand2", border=0, height=1, font=('ariel', '12', 'bold')
-    )
-    item.bind('<Enter>', on_enter)
-    item.bind('<Leave>', on_leave)
+    configDefBtn(item)
     pass
 
 
@@ -58,6 +45,22 @@ def configDefBtn(item: Button):
     item.bind('<Enter>', on_enter)
     item.bind('<Leave>', on_leave)
     return item
+
+def configDeleteBtn(item: Button):
+    def on_enter(event):
+        item.config(bg=color.redHighlight, highlightcolor=color.white)  # Change background color when mouse enters
+
+    def on_leave(event):
+        item.config(bg=color.red, highlightcolor=color.white)
+
+    item.config(
+        background=color.red, foreground=color.white,
+        activebackground=color.green, activeforeground=color.white,
+        highlightthickness=2, highlightbackground=color.green, highlightcolor=color.green,
+        cursor="hand2", border=0, height=1, font=('ariel', '12', 'bold')
+    )
+    item.bind('<Enter>', on_enter)
+    item.bind('<Leave>', on_leave)
 
 
 def add_hint(entry, hint_text):

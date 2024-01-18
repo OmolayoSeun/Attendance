@@ -9,11 +9,14 @@ from tools.Configure import *
 from database.DB import DB
 
 empDetails = []
+returnResult1 = None
+returnResult2 = None
 
 
 def save():
-    DB.saveEmpInfo(empDetails[0], empDetails[0], empDetails[1], empDetails[2], empDetails[3], empDetails[4],
-                   empDetails[5])
+    print(empDetails)
+    DB.saveEmpInfo(empDetails[0], empDetails[1], empDetails[2], empDetails[3], empDetails[4], empDetails[5],
+                   empDetails[6], str(returnResult1), str(returnResult2))
     pass
 
 
@@ -26,12 +29,9 @@ def __keepEmpDetails(frame, fName: str, mName: str, lName: str, phone: str, emai
         l.grid(row=18, column=0, columnspan=3)
 
     else:
-        empDetails.append(fName)
-        empDetails.append(mName)
-        empDetails.append(lName)
-        empDetails.append(phone)
-        empDetails.append(email)
-        empDetails.append(position)
+        global empDetails
+        empDetails = [fName.capitalize() + phone, fName.capitalize(), mName.capitalize(), lName.capitalize(),
+                      phone.capitalize(), email.capitalize(), position.capitalize()]
         addEmployeeNextPage()
     pass
 
@@ -93,9 +93,7 @@ def addEmployeePage():
     pass
 
 
-
 def addEmployeeNextPage():
-
     clear_content()
     frame = Frame(v.app)
     configFrame(frame)
@@ -103,18 +101,15 @@ def addEmployeeNextPage():
     v.holdFrameReference = frame
     v.currentView = v.viewEmpNext
 
-    text = configLabel(Label(frame, text="Put right index finger on the sensor"))
+    text = configLabel(Label(frame, text="Put and remove right index finger on the sensor four times"))
     text.config(fg='red')
 
     left = configLabel(Label(frame, image=Images.imageLeftHand))
     right = configLabel(Label(frame, image=Images.imageRightTurn))
-    btn1 = Button(frame, text="Save", padx=10, command=save)
-    configButton(btn1)
 
     text.grid(row=0, column=0, columnspan=3)
     left.grid(row=1, column=0)
     right.grid(row=1, column=2)
-    btn1.grid(row=2, column=1)
 
     v.app.update_idletasks()
     cenX = (v.app.winfo_width() - frame.winfo_reqwidth()) // 2
@@ -124,43 +119,45 @@ def addEmployeeNextPage():
 
     from tools.Reader import Reader
 
-
     def getFingerPrint():
         global returnResult1
         global returnResult2
-        a = False
+
         while True:
-            returnResult1 = Reader.getFingerPrint(a)
+            returnResult1 = Reader.getFingerPrint()
             if returnResult1 is None:
                 text.config(text="Failed")
-                time.sleep(3)
-                text.config(text="Put right index finger on the sensor")
+                time.sleep(2)
+                text.config(text="Put and remove right index finger on the sensor four times")
             else:
                 text.config(text="Right finger successful", fg='green')
-                time.sleep(3)
+                right.config(image=Images.imageRightChecked)
+                time.sleep(2)
                 break
-            a = True
 
         text.config(text="Put left index finger on the sensor", fg='red')
-        a = False
+        left.config(image=Images.imageLeftTurn)
+
         while True:
-            returnResult2 = Reader.getFingerPrint(a)
+            returnResult2 = Reader.getFingerPrint()
             if returnResult2 is None:
                 text.config(text="Failed")
-                time.sleep(3)
-                text.config(text="Put left index finger on the sensor")
+                time.sleep(2)
+                text.config(text="Put and remove left index finger on the sensor four times")
             else:
                 text.config(text="Left finger successful", fg='green')
-                time.sleep(3)
+                left.config(image=Images.imageLeftChecked)
+                time.sleep(2)
                 break
-            a = True
 
-    #Reader.getFingerPrint(False)
-    print("hello1")
-
-    #Reader.getFingerPrint(True)
-    print("hello2")
+        save()
+        text.config(text="Saved!")
+        time.sleep(2)
+        from ui.AdminScreen import adminPage1
+        adminPage1()
+        pass
 
     thread = threading.Thread(target=getFingerPrint)
     thread.start()
     pass
+# TODO work on the fingerprint page
