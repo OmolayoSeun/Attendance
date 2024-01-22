@@ -1,3 +1,5 @@
+from PIL import ImageTk, Image
+
 # Hold the image variables
 class Images:
     imageBackArrow = None

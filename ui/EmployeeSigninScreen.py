@@ -8,9 +8,9 @@ from tools.Configure import *
 from tools.Reader import Reader
 from datetime import datetime
 
-
 fingPrints = None
 viewDict = {}
+
 
 # Gets the fingerprints from the database
 def __getInfoFromDB():
@@ -116,7 +116,7 @@ def signingPage():
 
                     else:
                         # sign in
-                        listItem = [emp[1], emp[3], datetime.now().strftime("%d-%m-%Y"),
+                        listItem = [emp[1], emp[3], datetime.now().strftime("%A-%d-%m-%Y"),
                                     datetime.now().strftime("%H:%M:%S"), ""]
                         viewDict[emp[0]] = listItem
                         print(viewDict[emp[0]])

@@ -273,19 +273,17 @@ def adminPage2(index: int):
     canvas.create_window((0, 0), window=content_frame, anchor="nw")
 
     treeview = ttk.Treeview(content_frame, height=13,
-                            columns=("DAY", "DATE", "SIGN-IN TIME", "SIGN_OUT TIME"),
+                            columns=( "DATE", "SIGN-IN TIME", "SIGN_OUT TIME"),
                             show="headings")
 
-    treeview.column("#1", width=250)
-    treeview.column("#2", width=250)
-    treeview.column("#3", width=250)
-    treeview.column("#4", width=250)
+    treeview.column("#1", width=330)
+    treeview.column("#2", width=340)
+    treeview.column("#3", width=340)
 
     # Define the column headings
-    treeview.heading("#1", text="DAY")
-    treeview.heading("#2", text="DATE")
-    treeview.heading("#3", text="SIGN-IN TIME")
-    treeview.heading("#4", text="SIGN_OUT TIME")
+    treeview.heading("#1", text="DATE")
+    treeview.heading("#2", text="SIGN-IN TIME")
+    treeview.heading("#3", text="SIGN_OUT TIME")
 
     treeview.pack()
 
@@ -293,12 +291,6 @@ def adminPage2(index: int):
     content_frame.update_idletasks()
     canvas.configure(scrollregion=canvas.bbox("all"))
 
-    listItem = DB.getEmpAttendance(empInfo[index][0])
-
-    if listItem is not None and listItem != [[]]:
-        for l in listItem:
-            treeview.insert("", 'end',
-                            values=("", l[0], l[1], l[2]))
 
     # Update the scrollable region
     content_frame.update_idletasks()
@@ -313,12 +305,52 @@ def adminPage2(index: int):
     barGraph1.tw = None
 
     barGraph1.grid(row=7, column=0, columnspan=4)
-    create_bar_graph(barGraph1, 10, 17, 2)
+    # create_bar_graph(barGraph1, 10, 17, 2)
 
     configLabel(Label(frame, text="Sign-Out Stat")).grid(row=8, column=0, pady=5)
     barGraph2 = tk.Canvas(frame, width=898, height=25, bg=color.white, borderwidth=0)
     barGraph2.grid(row=9, column=0, columnspan=4)
-    create_bar_graph(barGraph2, 1, 0, 2)
+    # create_bar_graph(barGraph2, 1, 0, 2)
+
+    listItem = DB.getEmpAttendance(empInfo[index][0])
+    early = 0
+    late = 0
+
+
+    quick = 0
+    okay = 0
+    if listItem is not None and listItem != [[]]:
+        for l in listItem:
+            treeview.insert("", 'end', values=("", l[0], l[1], l[2]))
+            timeList = l[1].split(":")
+            hour = int(timeList[0])
+            minutes = int(timeList[1])
+
+            if hour > 8 or (hour == 8 and minutes > 30):
+                late += 1
+            else:
+                early += 1
+            try:
+                timeList = l[2].split(":")
+                hour = int(timeList[0])
+                minutes = int(timeList[1])
+
+                if hour > 4 or (hour == 4 and minutes > 30):
+                    okay += 1
+                else:
+                    quick += 1
+            except Exception as e:
+                print(e)
+
+        create_bar_graph(barGraph1, early, late, 0)
+        create_bar_graph(barGraph2, okay, quick, 0)
+    else:
+        create_bar_graph(barGraph1, 0, 0, 1)
+        create_bar_graph(barGraph2, 0, 0, 1)
+
+
+
+
 
     v.app.update_idletasks()
     cenX = (v.app.winfo_width() - frame.winfo_reqwidth()) // 2
