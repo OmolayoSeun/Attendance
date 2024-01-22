@@ -2,14 +2,14 @@ from tkinter import Frame, Button, Entry, Label
 from resources.Colors import Color as color
 import tkinter as tk
 
-
+# Set the default properties of a frame
 def configFrame(frame: Frame):
     frame.config(
         background=color.white
     )
     pass
 
-
+# Set the default properties of a label
 def configLabel(item: Label):
     item.config(
         background=color.white, foreground=color.grey,
@@ -17,18 +17,18 @@ def configLabel(item: Label):
     )
     return item
 
-
+# Set the default properties of an entry box
 def configEntry(item: Entry):
     item.config(border=1, background=color.white)
 
     pass
 
-
+# Set the default properties of a button
 def configButton(item: Button):
     configDefBtn(item)
     pass
 
-
+# Set the default properties of a button
 def configDefBtn(item: Button):
     def on_enter(event):
         item.config(bg=color.skyBlueHighlight, highlightcolor=color.green)  # Change background color when mouse enters
@@ -46,6 +46,7 @@ def configDefBtn(item: Button):
     item.bind('<Leave>', on_leave)
     return item
 
+# Set the default properties of the delete button
 def configDeleteBtn(item: Button):
     def on_enter(event):
         item.config(bg=color.redHighlight, highlightcolor=color.white)  # Change background color when mouse enters
@@ -62,7 +63,7 @@ def configDeleteBtn(item: Button):
     item.bind('<Enter>', on_enter)
     item.bind('<Leave>', on_leave)
 
-
+# Set the default hint properties of an entry box
 def add_hint(entry, hint_text):
     def on_entry_click(event):
         if entry.get() == hint_text:

@@ -1,6 +1,5 @@
 import tkinter
 from tkinter import ttk
-
 from database.DB import DB
 from resources.Variables import Variables as v
 from tools.ClearContent import clear_content
@@ -11,6 +10,7 @@ adminInfo = []
 empInfo = []
 
 
+# Retrieve data from the database
 def __getInfoFromDB():
     global adminInfo
     global empInfo
@@ -18,6 +18,7 @@ def __getInfoFromDB():
     empInfo = DB.getEmpList()
 
 
+# save the admin details to the database
 def __saveAdmin(hospitalName: str, pwd: str, comPwd: str, notifyTop: Label, notify: Label):
     if hospitalName == "Enter name" \
             or pwd == "Enter password" or comPwd == "Confirm password" \
@@ -38,17 +39,27 @@ def __saveAdmin(hospitalName: str, pwd: str, comPwd: str, notifyTop: Label, noti
     pass
 
 
+# clear all the registered employee from the database
+def clearDatabase():
+    if DB.clear():
+        global empInfo
+        empInfo = []
+        adminPage1()
+
+
+# delete a specific user from the database
 def deleteUser(index: int):
     result = DB.removeEmp(empInfo[index][0])
     if result:
-        #alert dialog
+        # alert dialog
         adminPage1()
     else:
-        #alert dialog
-        print("An error occured")
+        # alert dialog
+        print("An error occurred")
     pass
 
 
+# register and admin can only be done once
 def registerAdmin():
     clear_content()
     frame = Frame(v.app)
@@ -94,6 +105,7 @@ def registerAdmin():
     frame.place(x=cenX, y=cenY)
 
 
+# Display the first page where all this list of the registered employee will be displayed
 def adminPage1():
     def on_treeview_click(event):
         row_id = treeview.identify_row(event.y)  # Get the ID of the clicked row
@@ -163,6 +175,9 @@ def adminPage1():
     content_frame.update_idletasks()
     canvas.configure(scrollregion=canvas.bbox("all"))
 
+    clearDB = Button(frame, text="Clear Database", command=clearDatabase)
+    configDeleteBtn(clearDB)
+    clearDB.grid(row=2, column=4, pady=5, sticky='we')
     configDefBtn(Button(frame, text="Add +", command=lambda: addEmployeePage())).grid(row=2, column=6,
                                                                                       pady=5, sticky='we')
 
@@ -173,12 +188,12 @@ def adminPage1():
     frame.place(x=cenX, y=cenY)
     pass
 
-
+# This function display the signing chart of a particular user
 def adminPage2(index: int):
-    # __getInfoFromDB()
-
+    # for scrolling functionality
     def on_mousewheel(event):
         canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+
 
     def create_bar_graph(canvasObj: tkinter.Canvas, value1, value2, value3):
         size = 9
@@ -196,6 +211,7 @@ def adminPage2(index: int):
         canvasObj.create_rectangle((percentage1 * size) + (percentage2 * size), 0,
                                    (percentage1 * size) + (percentage2 * size) + (percentage3 * size), 30, fill="grey")
 
+    # TODO work on the popup dialog here
     def enter(event=None):
         # barGraph1.close()
         x, y, cx, cy = barGraph1.bbox("insert")
@@ -234,30 +250,19 @@ def adminPage2(index: int):
                                                                                              columnspan=2, sticky='w')
     configLabel(Label(frame, text=f"Email: {empInfo[index][5]}")).grid(row=1, column=2, columnspan=2, sticky='w')
     configLabel(Label(frame, text=f"Position: {empInfo[index][6]}")).grid(row=2, column=2, columnspan=2, sticky='w')
-    # configLabel(Label(frame, text=f"Gender: {empInfo[index][6]}")).grid(row=3, column=0, columnspan=2, sticky='w')
 
     configLabel(Label(frame, text="    ")).grid(row=10, column=3, pady=10)  # dummy label
     delete = Button(frame, text="Delete", command=lambda: deleteUser(index))
     configDeleteBtn(delete)
     delete.grid(row=10, column=3, rowspan=1, pady=5, ipadx=10, sticky='e')
 
-    Label(frame, text="Day", fg=color.white, bg=color.skyBlue, borderwidth=1, relief='solid',
-          font=('ariel', '10', 'bold')) \
-        .grid(row=4, column=0, sticky='we')
-    Label(frame, text="Date", fg=color.white, bg=color.skyBlue, border=1, relief='solid', font=('ariel', '10', 'bold')) \
-        .grid(row=4, column=1, sticky='we')
-    Label(frame, text="Sign-in Time", fg=color.white, bg=color.skyBlue, border=1, relief='solid',
-          font=('ariel', '10', 'bold')) \
-        .grid(row=4, column=2, sticky='we')
-    Label(frame, text="Sign-out Time", fg=color.white, bg=color.skyBlue, border=1, relief='solid',
-          font=('ariel', '10', 'bold')) \
-        .grid(row=4, column=3, sticky='we')
+    # Create the treeview widget
+    canvas = tk.Canvas(frame, background=color.white, width=1000)
+    canvas.grid(row=3, column=0, columnspan=4)
 
-    canvas = tk.Canvas(frame, background=color.white)
-    canvas.grid(row=5, column=0, columnspan=4, sticky='we')
     # Add a scrollbar for the canvas (vertical scrolling)
     scrollbar = tk.Scrollbar(frame, command=canvas.yview, background=color.white)
-    scrollbar.grid(row=5, column=3, sticky='nse')
+    scrollbar.grid(row=3, column=3, sticky='nse')
 
     # Configure the canvas to use the scrollbar
     canvas.configure(yscrollcommand=scrollbar.set)
@@ -267,13 +272,33 @@ def adminPage2(index: int):
     content_frame = tk.Frame(canvas)
     canvas.create_window((0, 0), window=content_frame, anchor="nw")
 
-    # Add some widgets (labels in this example) to the content frame
-    # for i in range(50):
-    #     label = tk.Label(content_frame, text=f"Label {i}")
-    #     label.pack()
-    # TODO fill the scroll bar with history of the user
-    label = tk.Label(content_frame, text=f"Label ", height=130)
-    label.pack()
+    treeview = ttk.Treeview(content_frame, height=13,
+                            columns=("DAY", "DATE", "SIGN-IN TIME", "SIGN_OUT TIME"),
+                            show="headings")
+
+    treeview.column("#1", width=250)
+    treeview.column("#2", width=250)
+    treeview.column("#3", width=250)
+    treeview.column("#4", width=250)
+
+    # Define the column headings
+    treeview.heading("#1", text="DAY")
+    treeview.heading("#2", text="DATE")
+    treeview.heading("#3", text="SIGN-IN TIME")
+    treeview.heading("#4", text="SIGN_OUT TIME")
+
+    treeview.pack()
+
+    # Update the scrollable region
+    content_frame.update_idletasks()
+    canvas.configure(scrollregion=canvas.bbox("all"))
+
+    listItem = DB.getEmpAttendance(empInfo[index][0])
+
+    if listItem is not None and listItem != [[]]:
+        for l in listItem:
+            treeview.insert("", 'end',
+                            values=("", l[0], l[1], l[2]))
 
     # Update the scrollable region
     content_frame.update_idletasks()

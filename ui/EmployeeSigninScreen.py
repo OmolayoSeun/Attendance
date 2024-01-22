@@ -8,17 +8,20 @@ from tools.Configure import *
 from tools.Reader import Reader
 from datetime import datetime
 
+
 fingPrints = None
 viewDict = {}
 
-
+# Gets the fingerprints from the database
 def __getInfoFromDB():
     global fingPrints
     fingPrints = DB.getFingPrints()
     pass
 
 
+# Display the signin interface
 def signingPage():
+    # for mouse wheel action
     def on_mousewheel(event):
         canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
 
@@ -27,7 +30,7 @@ def signingPage():
     configFrame(frame)
 
     v.holdFrameReference = frame
-    v.currentView = v.viewAdmin1
+    v.currentView = v.viewAttendance
 
     __getInfoFromDB()
 
@@ -82,6 +85,7 @@ def signingPage():
 
     frame.place(x=cenX, y=cenY)
 
+    # this function is called in a thread to verify fingerprints
     def getFingerPrint():
         global fingPrints
         f = []
@@ -103,6 +107,7 @@ def signingPage():
                 if emp is not None and emp is not [[]]:
                     if viewDict.get(emp[0]) is not None:
                         # sign out
+                        print("signout did not run")
                         listItem = viewDict[emp[0]]
                         if listItem[4] == "":
                             listItem[4] = datetime.now().strftime("%H:%M:%S")
@@ -126,7 +131,7 @@ def signingPage():
                         treeview.insert("", 'end',
                                         values=(dictItem[0], dictItem[1], dictItem[2], dictItem[3], dictItem[4]))
 
-
+    # Thread for calling the function that will listen for fingerprint data
     thread = threading.Thread(target=getFingerPrint)
     thread.start()
     pass

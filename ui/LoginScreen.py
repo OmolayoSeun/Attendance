@@ -6,6 +6,7 @@ from tools.Configure import *
 from ui.AdminScreen import adminPage1, registerAdmin
 from database.DB import DB
 
+# This function confirms the details and calls the admin page if the details matches
 def __nextLogin(e1: Entry, e2: Entry, frame):
     username = e1.get()
     password = e2.get()
@@ -32,7 +33,7 @@ def __nextLogin(e1: Entry, e2: Entry, frame):
 
     pass
 
-
+# This function displays the login page
 def loginPage():
     clear_content()
     frame = Frame(v.app)

@@ -8,11 +8,13 @@ from tools.ClearContent import clear_content
 from tools.Configure import *
 from database.DB import DB
 
+# variable to hold the data retrieved from the database and also the fingerprint
 empDetails = []
 returnResult1 = None
 returnResult2 = None
 
 
+# saves the employee details to the database
 def save():
     print(empDetails)
     DB.saveEmpInfo(empDetails[0], empDetails[1], empDetails[2], empDetails[3], empDetails[4], empDetails[5],
@@ -20,13 +22,14 @@ def save():
     pass
 
 
+# checks the form for empty boxes
 def __keepEmpDetails(frame, fName: str, mName: str, lName: str, phone: str, email: str, position: str):
     if fName == "Enter first name" or mName == "Enter middle name" or lName == "Enter last name" or \
             phone == "Enter phone no" or email == "Enter email" or position == "Enter position" or \
             fName == "" or mName == "" or lName == "" or phone == "" or email == "" or position == "":
-        l = configLabel(Label(frame, text="Empty fields"))
-        l.config(fg="red")
-        l.grid(row=18, column=0, columnspan=3)
+        lbl = configLabel(Label(frame, text="Empty fields"))
+        lbl.config(fg="red")
+        lbl.grid(row=18, column=0, columnspan=3)
 
     else:
         global empDetails
@@ -36,6 +39,7 @@ def __keepEmpDetails(frame, fName: str, mName: str, lName: str, phone: str, emai
     pass
 
 
+# display a form to register users
 def addEmployeePage():
     clear_content()
     frame = Frame(v.app)
@@ -93,6 +97,7 @@ def addEmployeePage():
     pass
 
 
+# Display the interface to collect the fingerprint of the registered employee
 def addEmployeeNextPage():
     clear_content()
     frame = Frame(v.app)
@@ -125,7 +130,7 @@ def addEmployeeNextPage():
 
         while True:
             returnResult1 = Reader.getFingerPrint()
-            if returnResult1 is None:
+            if returnResult1 == "ERR100" or returnResult1 == "ERR200":
                 text.config(text="Failed")
                 time.sleep(2)
                 text.config(text="Put and remove right index finger on the sensor four times")
@@ -140,7 +145,7 @@ def addEmployeeNextPage():
 
         while True:
             returnResult2 = Reader.getFingerPrint()
-            if returnResult2 is None:
+            if returnResult1 == "ERR100" or returnResult1 == "ERR200":
                 text.config(text="Failed")
                 time.sleep(2)
                 text.config(text="Put and remove left index finger on the sensor four times")
@@ -160,4 +165,3 @@ def addEmployeeNextPage():
     thread = threading.Thread(target=getFingerPrint)
     thread.start()
     pass
-# TODO work on the fingerprint page

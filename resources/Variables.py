@@ -1,7 +1,6 @@
+# This class contains variables that will be used across various modules of the software
 class Variables:
     app = None
-    ssid = "attendance"
-    pw = "attendance"
     holdFrameReference = None
     currentView = None
 
@@ -9,6 +8,7 @@ class Variables:
     viewAdmin2 = "admin2"
     viewLogin = "login"
     viewRegister = "reg"
+    viewAttendance = "attendance"
     viewEmp = "emp"
     viewEmpNext = "empNext"
     initialiseJVM = False

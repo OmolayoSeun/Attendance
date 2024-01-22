@@ -3,16 +3,20 @@ from sqlite3 import Error
 
 
 class DB:
+
     conn = sqlite3.connect("data.db")
 
+    # Open the database
     @staticmethod
     def openDB():
         DB.conn = sqlite3.connect("data.db")
 
+    # Close the database
     @staticmethod
     def closeDB():
         DB.conn.close()
 
+    # Save the admin to the database
     @staticmethod
     def saveAdminInfo(name: str, pw: str):
         DB.openDB()
@@ -29,12 +33,14 @@ class DB:
             DB.closeDB()
             return True
         except Error as e:
+            print(e)
             cursor.close()
             DB.closeDB()
             return False
 
         pass
 
+    # Get the admin details from the database
     @staticmethod
     def getAdminInfo():
         DB.openDB()
@@ -49,6 +55,7 @@ class DB:
         DB.closeDB()
         return rows[0]
 
+    # Save an employee to the database
     @staticmethod
     def saveEmpInfo(UID: str, fName: str, mName: str, lName: str, phone: str, email: str, pos: str, f1: str, f2: str):
         DB.openDB()
@@ -79,9 +86,9 @@ class DB:
             cursor.close()
             DB.closeDB()
             return False
-
     pass
 
+    # Get a particular employee from the database
     @staticmethod
     def getEmpInfo(UID: str):
         DB.openDB()
@@ -97,6 +104,7 @@ class DB:
         DB.closeDB()
         return rows
 
+    # Get the list of all the employee in the database
     @staticmethod
     def getEmpList():
         DB.openDB()
@@ -113,16 +121,23 @@ class DB:
         return rows
         pass
 
-    @staticmethod
-    def changePassword():
-        pass
-
+    # Remove a particular employee from the database
     @staticmethod
     def removeEmp(UID):
         DB.openDB()
         cursor = DB.conn.cursor()
         try:
-            cursor.execute(f"DELETE FROM Employee WHERE id= {UID}")
+            try:
+                cursor.execute(f"DELETE FROM Employee WHERE id= ?", (UID,))
+            except Exception as e:
+                print("Deleting from Employee table: ", e)
+            try:
+                cursor.execute(f"DELETE FROM Fingers WHERE id= ?", (UID,))
+            except Exception as e:
+                print("Deleting from Fingers table: ", e)
+
+            cursor.execute(f"DROP TABLE IF EXISTS {UID}")
+            DB.conn.commit()
             cursor.close()
             DB.closeDB()
             return True
@@ -134,6 +149,7 @@ class DB:
             return False
         pass
 
+    # Get the fingerprint list from the database
     @staticmethod
     def getFingPrints():
         DB.openDB()
@@ -151,6 +167,7 @@ class DB:
         return rows
         pass
 
+    # save an employee attendance to the database
     @staticmethod
     def saveEmpAttendance(empUsername: str, date: str, timeIn: str, timeOut: str):
         DB.openDB()
@@ -167,7 +184,9 @@ class DB:
             print(e)
             pass
         try:
-            cursor.execute(f"INSERT INTO {empUsername} VALUES ( ?, ?, ?)", (date, timeIn, timeOut,))
+            cursor.execute(f"REPLACE INTO {empUsername} (date, timeIn, timeOut) VALUES (?, ?, ?)",
+                           (date, timeIn, timeOut,))
+
             cursor.close()
             DB.conn.commit()
             DB.closeDB()
@@ -180,6 +199,7 @@ class DB:
 
         pass
 
+    # Get the attendance of a particular employee from the database
     @staticmethod
     def getEmpAttendance(empUsername: str):
         DB.openDB()
@@ -197,3 +217,29 @@ class DB:
         return rows
         pass
 
+    # Clear the database
+    @staticmethod
+    def clear():
+        try:
+            items = DB.getEmpList()
+
+            DB.openDB()
+            cursor = DB.conn.cursor()
+
+            if items is not None and items != [[]]:
+                for item in items:
+                    print("The value at item 0 is : ", item[0])
+                    cursor.execute(f"DROP TABLE IF EXISTS {item[0]}")
+
+            print("here ran after")
+            cursor.execute("DROP TABLE IF EXISTS Employee")
+            cursor.execute("DROP TABLE IF EXISTS Fingers")
+            DB.conn.commit()
+            cursor.close()
+            DB.closeDB()
+            return True
+        except Exception as e:
+            print(e)
+            DB.closeDB()
+            return False
+        pass

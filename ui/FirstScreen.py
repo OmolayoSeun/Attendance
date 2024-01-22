@@ -4,14 +4,14 @@ from tools.Configure import *
 from ui.EmployeeSigninScreen import signingPage
 from ui.LoginScreen import loginPage
 
-
+# This function calls the signin or the admin interface when called
 def button_click(call):
     if call == "Signing":
         signingPage()
     elif call == "Admin":
         loginPage()
 
-
+# This page display the first interface
 def firstPage():
     clear_content()
     frame = Frame(v.app)

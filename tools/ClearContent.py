@@ -1,14 +1,9 @@
-from tkinter import Frame
 from resources.Variables import Variables as v
 
-
+# Clear the widgets of the frame content
 def clear_content():
-    # for widget in v.app.winfo_children():
-    #     if widget == isOpened:
-    #         widget.destroy()
     try:
         v.holdFrameReference.destroy()
-    except:
-        print("Null View error")
-
+    except Exception as e:
+        print("Null View error\n", e)
     pass

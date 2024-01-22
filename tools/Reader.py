@@ -1,6 +1,7 @@
 from resources.Variables import Variables as v
 class Reader:
 
+    # Gets the fingerprint by called the jar sdk program for interfacing the fingerprint
     @staticmethod
     def getFingerPrint():
         # Boilerplate stuff to start the module
@@ -24,6 +25,7 @@ class Reader:
 
         return FPInfo
 
+    # This function checks the fingerprint if it matches
     @staticmethod
     def verifyFingerPrint(fingerPrints):
         import jpype.imports
@@ -43,10 +45,6 @@ class Reader:
 
         # print("The index value is ",FIndex)
         return FIndex
-
-    # @staticmethod
-    # def verifyFingerPrint(fingerPrints):
-    #     return "0"
 
 # Error code ERR100 no fingerprint scanner
 # Error code ERR200 failed operation
